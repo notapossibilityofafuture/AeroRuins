@@ -83,8 +83,8 @@ surf("olive_woodland",0.9,0.45,True,"b6bfb4","cdd3c4",W_,WF,"8e9e66","6a8250","O
 surf("humid_rainforest",0.95,0.95,True,"98aaa2","b0c0b4","46685c","1d3a30","6b8f4e","3f7035","JUNGLE_LOG","WILD","JUNGLE","JUNGLE","SMALL_JUNGLE",14,"warm")
 surf("black_bog",0.8,0.95,True,"8c9896","a2aeaa","3d5450","1a2825","5f7448","3f5a3a","MANGROVE_LOG","WILD","SWAMP","SWAMP","TREE",8,"warm",{"monster":cr(("bogged",50,4,4),("slime",30,2,4))})
         
-surf("stone_highlands",0.4,0.4,True,"a3aeb6","bdc6cb","4f7384","1f3744","8c9a7c","6f8566","SPRUCE_LOG","COLD","WINDSWEPT_FOREST","REDWOOD","TREE",2,"high",{"creature":cr(("goat",8,1,3),("sheep",10,2,3))})
-surf("cloud_crest",0.2,0.3,True,"b5c0c8","d0d8dc","5a7f90","264452","a2ae96","8a9c86","SPRUCE_LOG","COLD","WINDSWEPT_HILLS","REDWOOD","REDWOOD",1,"high,cold",{"creature":cr(("goat",10,1,3))})
+surf("stone_highlands",0.4,0.4,True,"c6d9e3","e2edf2","648da1","31586b","a4bd9b","7f9d70","SPRUCE_LOG","COLD","WINDSWEPT_FOREST","REDWOOD","TREE",2,"high",{"creature":cr(("goat",8,1,3),("sheep",10,2,3))})
+surf("cloud_crest",0.2,0.3,True,"d6e5ed","edf5f8","78a9bb","3e6e82","b7cea8","91ad82","SPRUCE_LOG","COLD","WINDSWEPT_HILLS","REDWOOD","REDWOOD",1,"high,cold",{"creature":cr(("goat",10,1,3))})
                                   
 surf("frozen_estate",-0.2,0.5,True,"d8dde2","e8ecef","6a8a9a","2a4050","b8c4c4","8a9a9a","SPRUCE_LOG","COLD","SNOWY_PLAINS","REDWOOD","REDWOOD",2,"gloom,bare,cold",{"monster":cr(("stray",60,2,4))},("white_ash",0.01),"gloom")
 surf("ashen_cathedral",0.4,0.2,True,"5a5e66","7a7e86","4a5a60","1e2a30","5a6050","4a5040","DARK_OAK_LOG","COLD","DARK_FOREST","TREE","TREE",3,"gloom,bare",{"monster":cr(("skeleton",60,2,4))},("ash",0.008),"gloom")
@@ -348,6 +348,13 @@ object ClimateMap {
         }
         if (gv > 0.28) return Climate.GLOOM[(tb * 3 + hb) % Climate.GLOOM.size]
         return Climate.GRID[tb][hb][if (vv < 0.0) 0 else 1]
+    }
+
+    fun useVanilla(seed: Long, x: Int, z: Int): Boolean {
+        if (Settings.vanillaMixChance <= 0) return false
+        val regionX = Math.floorDiv(x, 256)
+        val regionZ = Math.floorDiv(z, 256)
+        return Math.floorMod(mix(seed, regionX, regionZ, 777), 100) < Settings.vanillaMixChance
     }
 }
 '''

@@ -8,3 +8,4 @@ out/
 tools/__pycache__/
 src/main/resources/datapack/
 *.bak
+*.zip

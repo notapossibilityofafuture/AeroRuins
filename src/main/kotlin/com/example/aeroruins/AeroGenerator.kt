@@ -39,6 +39,7 @@ class AeroBiomeProvider : BiomeProvider() {
 
     private fun outdoor(seed: Long, x: Int, y: Int, z: Int): Biome {
         val c = ClimateMap.at(seed, x, z)
+        if (ClimateMap.useVanilla(seed, x, z)) return c.fallback
         if (y in 46..SEA_LEVEL && !c.gloom) {
             val id = when {
                 y <= 52 -> "deep_lake"

@@ -7,7 +7,6 @@ import org.bukkit.util.noise.SimplexOctaveGenerator
 import java.util.Random
 import java.util.concurrent.ConcurrentHashMap
 
-
 private val WILD = listOf(Material.DANDELION, Material.POPPY, Material.OXEYE_DAISY, Material.AZURE_BLUET)
 private val WHITE = listOf(Material.OXEYE_DAISY, Material.AZURE_BLUET, Material.LILY_OF_THE_VALLEY)
 private val DRY = listOf(Material.DANDELION, Material.DANDELION, Material.POPPY)
@@ -15,10 +14,6 @@ private val COLD = listOf(Material.AZURE_BLUET, Material.OXEYE_DAISY)
 private val REDS = listOf(Material.POPPY, Material.POPPY, Material.RED_TULIP)
 private val BLUES = listOf(Material.CORNFLOWER, Material.AZURE_BLUET, Material.ALLIUM)
 private val YELLOWS = listOf(Material.DANDELION, Material.DANDELION, Material.OXEYE_DAISY)
-
-
-
-
 
 enum class Climate(
     val id: String,
@@ -33,7 +28,7 @@ enum class Climate(
     val gloom: Boolean = false,
     val bare: Boolean = false,
     val high: Boolean = false,
-    val flora: Int = 6 
+    val flora: Int = 6
 ) {
     FROSTBITTEN_STEPPE("frostbitten_steppe", Material.SPRUCE_LOG, COLD, Biome.SNOWY_PLAINS, TreeType.REDWOOD, TreeType.TALL_REDWOOD, 1, cold = true),
     PAPER_BIRCH_BARRENS("paper_birch_barrens", Material.BIRCH_LOG, WHITE, Biome.BIRCH_FOREST, TreeType.BIRCH, TreeType.TALL_BIRCH, 5, cold = true),
@@ -82,7 +77,6 @@ enum class Climate(
     CUL_DE_SAC("cul_de_sac", Material.BIRCH_LOG, WHITE, Biome.PLAINS, TreeType.BIRCH, TreeType.TREE, 2, flora = 8);
 
     companion object {
-        
         val GRID: Array<Array<Array<Climate>>> = arrayOf(
             arrayOf(arrayOf(FROSTBITTEN_STEPPE, PAPER_BIRCH_BARRENS), arrayOf(HOARFROST_TAIGA, SILVER_BIRCH_VALE), arrayOf(FOGBOUND_SPRUCE, GREY_FEN)),
             arrayOf(arrayOf(DRY_MEADOW, WINDSWEPT_HEATH), arrayOf(OLD_OAK_FOREST, WHITE_BIRCH_FOREST), arrayOf(WET_WOODLAND, MOSSY_HOLLOWS)),
@@ -108,7 +102,6 @@ object ClimateMap {
 
     private val noises = ConcurrentHashMap<Long, Noises>()
 
-    
     private class Memo { var seed = 0L; var x = Int.MIN_VALUE; var z = Int.MIN_VALUE; var value: Climate = Climate.OLD_OAK_FOREST }
     private val memo = ThreadLocal.withInitial { Memo() }
 
@@ -129,7 +122,6 @@ object ClimateMap {
         val vv = n.v.noise(fx, fz, 0.5, 0.5, true)
         val gv = n.g.noise(fx, fz, 0.5, 0.5, true)
 
-        
         if (Terrain.heightAt(seed, x, z) >= HIGH_Y) return if (tv > 0.0) Climate.HIGH_WARM else Climate.HIGH_COLD
 
         val tb = when {
@@ -143,15 +135,20 @@ object ClimateMap {
             hv < 0.12 -> 1
             else -> 2
         }
-        
         when (Realms.at(seed, x, z)) {
             Realm.GARDEN -> return Climate.GARDEN[(hb + (if (vv < 0.0) 0 else 1)) % Climate.GARDEN.size]
             Realm.FLOWERS -> return Climate.FLOWERS[tb % Climate.FLOWERS.size]
             Realm.NEIGHBORHOOD -> return Climate.HOOD[if (vv < 0.0) 0 else 1]
             else -> Unit
         }
-        
         if (gv > 0.28) return Climate.GLOOM[(tb * 3 + hb) % Climate.GLOOM.size]
         return Climate.GRID[tb][hb][if (vv < 0.0) 0 else 1]
+    }
+
+    fun useVanilla(seed: Long, x: Int, z: Int): Boolean {
+        if (Settings.vanillaMixChance <= 0) return false
+        val regionX = Math.floorDiv(x, 256)
+        val regionZ = Math.floorDiv(z, 256)
+        return Math.floorMod(mix(seed, regionX, regionZ, 777), 100) < Settings.vanillaMixChance
     }
 }

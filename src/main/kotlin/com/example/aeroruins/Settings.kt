@@ -20,6 +20,7 @@ object Settings {
     @Volatile var villageChance = 20
     @Volatile var mobSpawnRate = 0.25
     @Volatile var structureMobRate = 0.4
+    @Volatile var vanillaMixChance = 25
     @Volatile var datapackAutoDownload = false
     @Volatile var datapackUrl = ""
     @Volatile var datapackFileName = "aeroruins-datapack.zip"
@@ -41,6 +42,7 @@ object Settings {
         villageChance = c.getInt("village-chance", 20).coerceIn(0, 100)
         townChance = c.getInt("town-chance", 18).coerceIn(0, 100)
         roadSpacing = c.getInt("road-spacing", 1024).coerceAtLeast(256)
+        vanillaMixChance = c.getInt("vanilla-mix-chance", 25).coerceIn(0, 100)
         mobSpawnRate = c.getDouble("mob-spawn-rate", 0.25).coerceIn(0.0, 1.0)
         structureMobRate = c.getDouble("structure-mob-rate", 0.4).coerceIn(0.0, 1.0)
         chestScale = c.getDouble("chest-rarity", 1.0).coerceIn(0.0, 20.0)

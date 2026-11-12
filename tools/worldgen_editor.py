@@ -21,6 +21,7 @@ CONFIG_FIELDS = [
     ("village-chance", "Probabilidad de aldeas", "int"),
     ("town-chance", "Probabilidad de ciudades", "int"),
     ("road-spacing", "Separacion de carreteras", "int"),
+    ("vanilla-mix-chance", "Mezcla de biomas vanilla", "int"),
     ("mob-spawn-rate", "Tasa de mobs naturales", "float"),
     ("structure-mob-rate", "Tasa de guardianes", "float"),
     ("veil-dimensions", "Dimensiones The Veil", "bool"),
@@ -176,6 +177,8 @@ class WorldgenEditor(tk.Tk):
                 values[key] = float(raw)
         if not 0 <= values["liminal-chance"] <= 100:
             raise ValueError("liminal-chance debe estar entre 0 y 100")
+        if not 0 <= values["vanilla-mix-chance"] <= 100:
+            raise ValueError("vanilla-mix-chance debe estar entre 0 y 100")
         if not 0 <= values["village-chance"] <= 100 or not 0 <= values["town-chance"] <= 100:
             raise ValueError("village-chance y town-chance deben estar entre 0 y 100")
         if not 0 <= values["mob-spawn-rate"] <= 1 or not 0 <= values["structure-mob-rate"] <= 1:

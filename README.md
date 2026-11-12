@@ -87,7 +87,10 @@ classic-structures: true
 liminal-chance: 45
 world-size: 20000
 dome-spacing: 7000
-road-spacing: 1024
+village-chance: 8
+town-chance: 8
+road-spacing: 1280
+vanilla-mix-chance: 25
 mob-spawn-rate: 0.25
 structure-mob-rate: 0.4
 fauna-density: 1.0
