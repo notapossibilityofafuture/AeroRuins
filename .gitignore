@@ -1,0 +1,10 @@
+.gradle/
+.idea/
+.kotlin/
+build/
+out/
+*.iml
+*.log
+tools/__pycache__/
+src/main/resources/datapack/
+*.bak

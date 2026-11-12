@@ -1,0 +1,89 @@
+name: AeroRuins
+version: 2.2.0
+main: com.example.aeroruins.AeroPlugin
+api-version: '1.21.11'
+authors:
+  - notapossibilityofafuture
+description: Frutiger Aero + liminal ruins worldgen (Dr. Stone vibes)
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:2.0.21
+commands:
+  aeroworld:
+    description: Crea o entra a un mundo AeroRuins
+    usage: /aeroworld [nombre]
+    permission: aeroruins.create
+  aerotp:
+    description: Teletransporta a ciudades, aldeas, desgarros, domos, zonas y salas
+    usage: /aerotp <destino>
+  aeroveil:
+    description: Teletransporta a otra dimension de The Veil
+    usage: /aeroveil <surface|dermis|hypodermis|muscle>
+permissions:
+  aeroruins.create:
+    description: Crear mundos con /aeroworld
+    default: op
+  aeroruins.tp.*:
+    description: Todos los destinos de /aerotp
+    default: op
+    children:
+      aeroruins.tp.jungle: true
+      aeroruins.tp.aero: true
+      aeroruins.tp.backrooms: true
+      aeroruins.tp.mall: true
+      aeroruins.tp.quarry: true
+      aeroruins.tp.town: true
+      aeroruins.tp.city: true
+      aeroruins.tp.village: true
+      aeroruins.tp.tear: true
+      aeroruins.tp.dome: true
+      aeroruins.tp.garden: true
+      aeroruins.tp.flowers: true
+      aeroruins.tp.neighborhood: true
+      aeroruins.tp.stronghold: true
+  aeroruins.tp.jungle:
+    default: false
+  aeroruins.tp.aero:
+    default: false
+  aeroruins.tp.backrooms:
+    default: false
+  aeroruins.tp.mall:
+    default: false
+  aeroruins.tp.quarry:
+    default: false
+  aeroruins.tp.town:
+    default: false
+  aeroruins.tp.city:
+    default: false
+  aeroruins.tp.village:
+    default: false
+  aeroruins.tp.tear:
+    default: false
+  aeroruins.tp.dome:
+    default: false
+  aeroruins.tp.garden:
+    default: false
+  aeroruins.tp.flowers:
+    default: false
+  aeroruins.tp.neighborhood:
+    default: false
+  aeroruins.tp.stronghold:
+    default: false
+  aeroruins.veil.tp.*:
+    description: Todas las dimensiones de /aeroveil
+    default: op
+    children:
+      aeroruins.veil.tp.surface: true
+      aeroruins.veil.tp.dermis: true
+      aeroruins.veil.tp.hypodermis: true
+      aeroruins.veil.tp.muscle: true
+  aeroruins.veil.tp.surface:
+    default: false
+  aeroruins.veil.tp.dermis:
+    default: false
+  aeroruins.veil.tp.hypodermis:
+    default: false
+  aeroruins.veil.tp.muscle:
+    default: false
+  aeroruins.veil.portal:
+    description: Usar los portales (desgarros y plataformas) entre dimensiones
+    default: true
