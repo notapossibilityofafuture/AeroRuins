@@ -63,7 +63,7 @@ Set these values in `plugins/AeroRuins/config.yml`:
 
 ```yaml
 datapack-auto-download: true
-datapack-url: "https://github.com/notapossibilityofafuture/AeroRuins/releases/latest/download/aeroruins-datapack.zip"
+datapack-url: "https://github.com/notapossibilityofafuture/AeroRuins/releases/download/Release/AeroRuins-datapack-v2.2.0.zip"
 datapack-file-name: aeroruins-datapack.zip
 datapack-timeout-seconds: 30
 datapack-max-size-mb: 64
