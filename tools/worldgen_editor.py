@@ -134,6 +134,7 @@ class WorldgenEditor(tk.Tk):
         ttk.Button(buttons, text="Guardar configuracion", command=self.save_config).pack(side="left", padx=3)
         ttk.Button(buttons, text="Regenerar biomas", command=self.generate_world).pack(side="left", padx=3)
         ttk.Button(buttons, text="Regenerar loot", command=self.generate_loot).pack(side="left", padx=3)
+        ttk.Button(buttons, text="Empaquetar datapack", command=self.package_datapack).pack(side="left", padx=3)
         ttk.Button(buttons, text="Compilar plugin", command=self.build_plugin).pack(side="left", padx=3)
 
         left = ttk.Frame(json_tab)
@@ -254,6 +255,10 @@ class WorldgenEditor(tk.Tk):
         os.makedirs(self.datapack_dir, exist_ok=True)
         self.run_tool([sys.executable, os.path.join(self.root_dir, "tools", "gen_loot.py"), self.datapack_dir], "Error al generar loot")
         self.refresh_jsons()
+
+    def package_datapack(self):
+        output = os.path.join(self.root_dir, "aeroruins-datapack.zip")
+        self.run_tool([sys.executable, os.path.join(self.root_dir, "tools", "package_datapack.py"), self.datapack_dir, output], "Error al empaquetar datapack")
 
     def build_plugin(self):
         command = "gradlew.bat" if os.name == "nt" else "./gradlew"

@@ -63,7 +63,7 @@ Set these values in `plugins/AeroRuins/config.yml`:
 
 ```yaml
 datapack-auto-download: true
-datapack-url: "https://example.com/aeroruins-datapack.zip"
+datapack-url: "https://github.com/notapossibilityofafuture/AeroRuins/releases/latest/download/aeroruins-datapack.zip"
 datapack-file-name: aeroruins-datapack.zip
 datapack-timeout-seconds: 30
 datapack-max-size-mb: 64
@@ -118,7 +118,12 @@ The generator scripts can also be executed directly:
 ```powershell
 python tools\gen_world.py <datapack-folder> <Climate.kt-output>
 python tools\gen_loot.py <datapack-folder>
+python tools\package_datapack.py <datapack-folder> aeroruins-datapack.zip
 ```
+
+Sube `aeroruins-datapack.zip` como asset de una GitHub Release. La URL configurada
+descarga automáticamente el asset de la última Release; debe existir una Release
+antes de crear mundos con la descarga automática activada.
 
 ## Build From Source
 

@@ -3,6 +3,9 @@ ROOT = sys.argv[1]; KT = sys.argv[2]
 BIOME_DIR = os.path.join(ROOT, "data/aeroruins/worldgen/biome")
 TAG_DIR = os.path.join(ROOT, "data/minecraft/tags/worldgen/biome")
 os.makedirs(BIOME_DIR, exist_ok=True); os.makedirs(os.path.join(TAG_DIR, "has_structure"), exist_ok=True)
+with open(os.path.join(ROOT, "pack.mcmeta"), "w", encoding="utf-8") as handle:
+    json.dump({"pack": {"pack_format": 94, "description": "AeroRuins custom biomes"}}, handle, indent=2)
+    handle.write("\n")
 H = lambda s: int(s, 16)
 def mob(t, w, lo=4, hi=4): return {"type": "minecraft:" + t, "weight": w, "minCount": lo, "maxCount": hi}
 def cr(*p): return [mob(n, w, lo, hi) for (n, w, lo, hi) in p]
