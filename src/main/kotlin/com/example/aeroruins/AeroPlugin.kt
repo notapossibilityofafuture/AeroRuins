@@ -60,14 +60,30 @@ class AeroPlugin : JavaPlugin() {
     
     fun worldFor(base: String, layer: Int, seed: Long): World? {
         val name = base + Veil.SUFFIX[layer]
-        Bukkit.getWorld(name)?.let { return it }
+        Bukkit.getWorld(name)?.let {
+            ensureWorldDataFolder(name)
+            return it
+        }
+        if (!ensureWorldDataFolder(name)) return null
         val creator = WorldCreator(name)
         if (layer == 0) {
             creator.generator(AeroGenerator()).biomeProvider(AeroBiomeProvider()).generateStructures(true)
         } else {
             creator.seed(seed).generator(VeilGenerator(layer)).biomeProvider(VeilBiomeProvider(layer)).generateStructures(false)
         }
-        return creator.createWorld()
+        return creator.createWorld()?.also { ensureWorldDataFolder(name) }
+    }
+
+    private fun ensureWorldDataFolder(name: String): Boolean {
+        val worldDir = File(server.worldContainer, name)
+        val dataDir = File(worldDir, "data")
+        if (dataDir.isDirectory) return true
+        if (dataDir.mkdirs() || dataDir.isDirectory) {
+            logger.info("Created missing world data directory: ${dataDir.path}")
+            return true
+        }
+        logger.severe("Cannot create world data directory: ${dataDir.path}")
+        return false
     }
 
     private fun applyBorder(world: World) {

@@ -49,6 +49,7 @@ object Tokyo3 {
             tower(p, random, tx, tz, w, d, low, h)
             towers.add(intArrayOf(tx, tz, w, d, h))
         }
+        StructureDetails.plaza(p, random, x0, z0, AREA, AREA, low)
         if (towers.isNotEmpty() && Loot.rare(random, 30.0)) {
             val t = towers[random.nextInt(towers.size)]
             Loot.fill(p, random, t[0], t[1], t[2], t[3], 2, listOf(low + 1, low + 5), "tower", listOf(EntityType.ZOMBIE, EntityType.SKELETON), 1, 3)

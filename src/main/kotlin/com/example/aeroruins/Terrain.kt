@@ -46,10 +46,10 @@ object Terrain {
         var h = SEA_LEVEL + 9 + c * 8 + d * amp
 
         
-        val region = smooth((g.mountains.noise(fx, fz, 0.5, 0.5, true) - 0.12) / 0.35)
+        val region = smooth((g.mountains.noise(fx, fz, 0.5, 0.5, true) - 0.05) / 0.3)
         if (region > 0.0) {
             val crest = 1.0 - abs(g.ridge.noise(fx, fz, 0.5, 0.5, true))
-            h += region * (7.0 + 58.0 * crest.pow(1.9))
+            h += region * (10.0 + 82.0 * crest.pow(1.7))
         }
         h = maxOf(h, SEA_LEVEL + 2.0)
 

@@ -100,6 +100,8 @@ object Suburb {
                 p.set(x0 + w - 1, low + 4 + dy, z0 + dz, wallMat)
             }
         }
+        StructureDetails.facade(p, random, x0, z0, w, d, low, 3, modern = !rustic)
+        StructureDetails.roofline(p, x0, z0, w, d, low + 4 + (d + 1) / 2, modern = !rustic)
         Interiors.furnish(p, random, x0, z0, w, d, 1, listOf(low), 7)
 
         if (!rustic) {

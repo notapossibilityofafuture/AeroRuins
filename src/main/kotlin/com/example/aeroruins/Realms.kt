@@ -25,11 +25,11 @@ object Realms {
         val fx = x.toDouble()
         val fz = z.toDouble()
         val v = g.a.noise(fx, fz, 0.5, 0.5, true)
-        val value = if (v < 0.18) {
+        val value = if (v < 0.38) {
             Realm.WILD
         } else {
             val w = g.b.noise(fx, fz, 0.5, 0.5, true)
-            if (w < -0.15) Realm.GARDEN else if (w < 0.2) Realm.FLOWERS else Realm.NEIGHBORHOOD
+            if (w < -0.05) Realm.GARDEN else if (w < 0.35) Realm.FLOWERS else Realm.NEIGHBORHOOD
         }
         m.seed = seed; m.x = x; m.z = z; m.value = value
         return value

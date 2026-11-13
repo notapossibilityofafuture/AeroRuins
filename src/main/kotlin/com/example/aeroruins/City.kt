@@ -102,6 +102,9 @@ object City {
             if (random.nextInt(100) < 60) p.set(x0 + dx, low + 2, z0 + 1, Material.BOOKSHELF)
         }
         for (dx in 2..6) p.set(x0 + dx, low + 1, z0 + d - 3, Material.SPRUCE_PLANKS) 
+        StructureDetails.facade(p, random, x0, z0, w, d, low, 4, modern = true)
+        StructureDetails.roofline(p, x0, z0, w, d, low + 6, modern = true)
+        StructureDetails.plaza(p, random, x0 - 1, z0 - 1, w + 2, d + 2, low)
         Interiors.furnish(p, random, x0, z0, w, d, 2, listOf(low), 16)
         if (Loot.rare(random, 35.0)) Loot.chestAt(p, random, x0 + w - 2, low + 1, z0 + 2, "mall")
     }
@@ -139,6 +142,8 @@ object City {
             p.set(sx + dx, low + dy, sz + dz, if (front && dy in 2..3) Material.LIGHT_GRAY_STAINED_GLASS else Material.WHITE_CONCRETE)
         }
         for (dx in 0..9) for (dz in 0..4) p.set(sx + dx, low + 5, sz + dz, Material.GRAY_CONCRETE)
+        StructureDetails.roofline(p, sx, sz, 10, 5, low + 6, modern = true)
+        StructureDetails.plaza(p, random, x0, z0, w, d, low)
         Interiors.furnish(p, random, sx, sz, 10, 5, 1, listOf(low), 10)
         if (Loot.rare(random, 40.0)) Loot.chestAt(p, random, sx + 8, low + 1, sz + 3, "mall")
         repeat(1 + random.nextInt(2)) { car(p, random, x0 + 1 + random.nextInt(5), low + 1, z0 + 4 + random.nextInt(4), true) }

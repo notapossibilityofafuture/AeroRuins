@@ -25,8 +25,8 @@ class Site(val cx: Int, val cz: Int, val dmax: Int)
 
 
 object Layers {
-    fun hypoVariant(seed: Long, x: Int, z: Int): Int = mix(seed, fdiv(x, 192), fdiv(z, 192), 160) % 3
-    fun muscleVariant(seed: Long, x: Int, z: Int): Int = mix(seed, fdiv(x, 192), fdiv(z, 192), 161) % 3
+    fun hypoVariant(seed: Long, x: Int, z: Int): Int = mix(seed, fdiv(x, 192), fdiv(z, 192), 160) % 5
+    fun muscleVariant(seed: Long, x: Int, z: Int): Int = mix(seed, fdiv(x, 192), fdiv(z, 192), 161) % 5
 
     
 
@@ -132,8 +132,9 @@ object Layers {
             return
         }
 
-        val period = if (dist == 1) 32 else 40
-        val street = if (dist == 1) 6 else 8
+        val variant = muscleVariant(seed, wx, wz)
+        val period = when (variant) { 0 -> 40; 1 -> 32; 2 -> 48; 3 -> 36; else -> 56 }
+        val street = when (variant) { 2 -> 6; 4 -> 10; else -> if (dist == 1) 6 else 8 }
         val bxm = fmod(wx, period)
         val bzm = fmod(wz, period)
         if (bxm < street || bzm < street) { 
@@ -151,7 +152,7 @@ object Layers {
         val gx = fdiv(wx, period)
         val gz = fdiv(wz, period)
         val bh = mix(seed, gx, gz, 156)
-        val dens = when (dist) { 0 -> 80; 1 -> 70; else -> 55 }
+        val dens = when (dist) { 0 -> 62; 1 -> 52; else -> 38 }
         if (bh % 100 >= dens) return
         val bsz = period - street
         val lx = wx - (gx * period + street)
@@ -209,7 +210,7 @@ object Layers {
     }
 
     
-    private fun section(seed: Long, wx: Int, wz: Int): Int = mix(seed, fdiv(wx, 192), fdiv(wz, 192), 195) % 6
+    private fun section(seed: Long, wx: Int, wz: Int): Int = mix(seed, fdiv(wx, 192), fdiv(wz, 192), 195) % 8
 
     private fun hypodermis(seed: Long, data: ChunkData, x: Int, z: Int, wx: Int, wz: Int) {
         val f = HOSP_F
@@ -223,7 +224,7 @@ object Layers {
         val corridor = bx < 6 || bz < 6
         val lx = bx - 6
         val lz = bz - 6
-        val pitch = when (sect) { 2 -> 5; 5 -> 4; else -> 7 }
+        val pitch = when (sect) { 2 -> 5; 5 -> 4; 6 -> 9; 7 -> 6; else -> 7 }
         val checker = ((fdiv(wx, 2) + fdiv(wz, 2)) and 1) == 0
         var floor = if (corridor) {
             if (checker) Material.WHITE_CONCRETE else Material.LIGHT_GRAY_CONCRETE
@@ -255,6 +256,20 @@ object Layers {
                     val ez = if (mix(seed, gx, gz, 202) % 100 < 40) 41 else 28 + mix(seed, gx, gz, 203) % 12
                     strip = (lz in 19..22 && lx in sx..ex) || (lx in 19..22 && lz in sz..ez)
                     wall = !strip
+                }
+                6 -> {
+                    val hallX = lx in 18..22
+                    val hallZ = lz in 8..12
+                    wall = !(hallX || hallZ)
+                    if (hallX && lz == 8 && mix(seed, gx, gz, 205) % 100 < 35) door = true
+                    if (hallZ && lx == 18 && mix(seed, gx, gz, 206) % 100 < 35) door = true
+                    facing = if (hallX) "north" else "east"
+                }
+                7 -> {
+                    val wing = (lx in 8..12 && lz in 4..37) || (lz in 8..12 && lx in 4..37)
+                    wall = !wing
+                    if (wing && ((lx == 8 && lz % 9 == 4) || (lz == 8 && lx % 9 == 4))) door = true
+                    facing = if (lx == 8) "east" else "north"
                 }
                 else -> { 
                     val wallX = lx % pitch == 0 || lx == 41
@@ -295,6 +310,8 @@ object Layers {
         val lightRoom = when (sect) {
             1 -> !corridor && lx % 8 in 0..1 && lz % 8 in 0..1
             3 -> strip && (lx + lz) % 6 == 0
+            6 -> !corridor && ((lx + lz) % 10 == 0)
+            7 -> !corridor && (lx % 9 == 4 || lz % 9 == 4)
             else -> !corridor && fmod(lx, pitch) == pitch / 2 && fmod(lz, pitch) == pitch / 2
         }
         val lightCorr = corridor && ((bx in 2..3 && bz >= 6 && fmod(wz, 6) == 3) || (bz in 2..3 && bx >= 6 && fmod(wx, 6) == 3))

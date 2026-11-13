@@ -21,6 +21,8 @@ object Apartments {
         balconies(p, random, x0, z0, base, floors)
         ivy(p, random, x0, z0, base, height)
         roof(p, random, x0, z0, base, height, climate)
+        StructureDetails.facade(p, random, x0, z0, W, D, base, height, modern = true)
+        StructureDetails.roofline(p, x0, z0, W, D, base + height + 1, modern = true)
         Interiors.furnish(p, random, x0, z0, W, D, 2, (0 until floors).map { base + it * 4 }, 9)
         val ys = (0 until floors).map { base + it * 4 + 1 }
         Loot.fill(

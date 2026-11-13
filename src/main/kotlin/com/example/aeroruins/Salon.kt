@@ -77,6 +77,7 @@ object Salon {
         for (dx in 0 until W) for (dz in 1..D - H) {
             if (random.nextInt(100) < 22) p.hang(x0 + dx, y0 + H, z0 + dz, 1 + random.nextInt(5))
         }
+        StructureDetails.roofline(p, x0, z0, W, D, y0 + H + 1, modern = true)
 
         
         for (dx in 9..11) for (dz in 2..3) p.set(x0 + dx, y0 + 1, z0 + dz, Material.POLISHED_BLACKSTONE)

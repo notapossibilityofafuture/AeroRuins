@@ -31,6 +31,7 @@ object Village {
     private const val DESERT = 2
     private const val WALL_R = 44
     private val DRY = setOf("yellow_plains", "scrub_savanna", "dust_flats", "dry_acacia_plain", "sun_bleached_grove", "rust_meadow", "dandelion_plain")
+    private val COLD = setOf("frostbitten_steppe", "paper_birch_barrens", "hoarfrost_taiga", "silver_birch_vale", "fogbound_spruce", "grey_fen")
 
     class Piece(val kind: Int, val x: Int, val z: Int)
 
@@ -127,7 +128,7 @@ object Village {
         if (c[0] < bx - 70 || c[0] > bx + 85 || c[1] < bz - 70 || c[1] > bz + 85) return
         val st = style(seed, gx, gz, c)
         val desert = st == DESERT
-        val ruined = mix(seed, gx, gz, 182) % 100 < 45 
+        val ruined = mix(seed, gx, gz, 182) % 100 < 18
         val list = pieces(seed, gx, gz, c, st)
         if (st == FORTIFIED) wall(seed, random, p, bx, bz, gen, c)
 
@@ -168,10 +169,16 @@ object Village {
         val t = p.type(x, h, z)
         if (t == Material.GRASS_BLOCK || t == Material.DIRT || t == Material.COARSE_DIRT || t == Material.PODZOL) {
             p.set(x, h, z, Material.DIRT_PATH)
-            if ((x * 7 + z * 13) % 17 == 0) { 
-                p.set(x + 1, h + 1, z, Material.OAK_FENCE)
-                p.set(x + 1, h + 2, z, Material.OAK_FENCE)
-                p.set(x + 1, h + 3, z, Material.TORCH)
+            // Vanilla village paths are two blocks wide at intersections and
+            // never turn into a continuous fence line.
+            if ((x + z) % 5 == 0) {
+                val sideX = x + 1
+                val sideY = gen.heightAt(seed, sideX, z)
+                if (sideX in bx until bx + 16) {
+                    val side = p.type(sideX, sideY, z)
+                    if (side == Material.GRASS_BLOCK || side == Material.DIRT || side == Material.COARSE_DIRT || side == Material.PODZOL)
+                        p.set(sideX, sideY, z, Material.DIRT_PATH)
+                }
             }
             if (!p.type(x, h + 1, z).isSolid) p.set(x, h + 1, z, Material.AIR) 
         }
@@ -268,16 +275,18 @@ object Village {
         val low = Sites.flatBase(seed, gen, x0, z0, w, d, 1, 3, true) ?: return
         clear(p, x0, z0, w, d, low, 9)
         for (dx in 0 until w) for (dz in 0 until d) p.set(x0 + dx, low, z0 + dz, Material.COARSE_DIRT)
+        val climate = ClimateMap.at(seed, x0, z0).id
+        val timber = if (climate in COLD) Material.SPRUCE_PLANKS else Material.OAK_PLANKS
         for (dy in 1..4) for (dx in 0 until w) for (dz in 0 until d) {
             val edge = dx == 0 || dx == w - 1 || dz == 0 || dz == d - 1
             if (!edge) continue
             val door = dz == d - 1 && dx in 4..6 && dy <= 3
             if (door) continue
             if (random.nextInt(100) < 6) continue
-            p.set(x0 + dx, low + dy, z0 + dz, if (desert) Material.SANDSTONE else if (dy == 1 || (dx % 5 == 0 && dz % 7 == 0)) Material.DARK_OAK_PLANKS else Material.SPRUCE_PLANKS)
+            p.set(x0 + dx, low + dy, z0 + dz, if (desert) Material.SANDSTONE else if (dy == 1 || (dx % 5 == 0 && dz % 7 == 0)) Material.DARK_OAK_PLANKS else timber)
         }
         if (desert) gable(p, x0, z0, w, d, low + 5, true, Material.SANDSTONE_STAIRS, Material.SANDSTONE_SLAB, Material.SANDSTONE)
-        else gable(p, x0, z0, w, d, low + 5, true, Material.SPRUCE_STAIRS, Material.SPRUCE_SLAB, Material.SPRUCE_PLANKS)
+        else gable(p, x0, z0, w, d, low + 5, true, Material.SPRUCE_STAIRS, Material.SPRUCE_SLAB, timber)
         repeat(10) {
             val x = x0 + 1 + random.nextInt(w - 2)
             val z = z0 + 1 + random.nextInt(d - 3)

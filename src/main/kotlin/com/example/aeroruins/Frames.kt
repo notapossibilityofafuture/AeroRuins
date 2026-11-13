@@ -78,6 +78,8 @@ object Frames {
                 }
             }
         }
+        StructureDetails.facade(p, random, x0, z0, S, S, base, height, modern = true)
+        StructureDetails.roofline(p, x0, z0, S, S, base + height + 1, modern = true)
 
         
         if (random.nextInt(100) < 35 && p.type(x0 + 3, base + height, z0 + 3).isSolid) {

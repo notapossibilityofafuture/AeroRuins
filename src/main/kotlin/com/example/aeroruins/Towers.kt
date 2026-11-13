@@ -20,6 +20,8 @@ object Towers {
         val height = 45 + random.nextInt(65)
         shell(p, random, x0, z0, size, low, height)
         overgrowth(p, random, x0, z0, size, low, height)
+        StructureDetails.facade(p, random, x0, z0, size, size, low, height, modern = true)
+        StructureDetails.roofline(p, x0, z0, size, size, low + height, modern = true)
 
         val ry = low + height
         val climate = ClimateMap.at(seed, x0, z0)

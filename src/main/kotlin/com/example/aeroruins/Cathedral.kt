@@ -64,6 +64,7 @@ object Cathedral {
             if (random.nextInt(100) < 30) continue
             if (p.isAir(x0 + dx, low + 1, z0 + dz)) p.put(x0 + dx, low + 1, z0 + dz, Material.DARK_OAK_STAIRS, "[facing=north]")
         }
+        StructureDetails.roofline(p, x0, z0, W, LEN, low + wallH + 1, modern = false)
         
         val ax = x0 + W / 2
         val az = z0 + LEN - 4

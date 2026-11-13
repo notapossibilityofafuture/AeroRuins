@@ -260,7 +260,116 @@ object CaveStyles {
             "bamboo_grotto", arrayOf(M.MOSS_BLOCK, M.PODZOL, M.ROOTED_DIRT, M.DIRT),
             arrayOf(M.MOSS_BLOCK, M.DIRT), 30,
             arrayOf(Deco(M.BAMBOO, 14), Deco(M.FERN, 8), Deco(M.SHORT_GRASS, 8)), emptyArray(), 1, 6
-        )
+        ),
+
+        CaveStyle(
+            "nostalgia_valley", arrayOf(M.GRASS_BLOCK, M.GRASS_BLOCK, M.MOSS_BLOCK, M.DIRT, M.FLOWERING_AZALEA_LEAVES),
+            arrayOf(M.LIGHT_BLUE_TERRACOTTA, M.WHITE_CONCRETE, M.MOSS_BLOCK, M.GLOWSTONE), 18,
+            arrayOf(
+                Deco(M.SHORT_GRASS, 28), Deco(M.FERN, 10), Deco(M.DANDELION, 8),
+                Deco(M.POPPY, 5), Deco(M.AZURE_BLUET, 5), Deco(M.FLOWERING_AZALEA, 4)
+            ),
+            arrayOf(Deco(M.SPORE_BLOSSOM, 5), Deco(M.GLOW_LICHEN, 8)),
+            2, 20
+        ),
+
+        CaveStyle(
+            "cloud_gardens", arrayOf(M.WHITE_CONCRETE, M.CALCITE, M.MOSS_BLOCK, M.GRASS_BLOCK),
+            arrayOf(M.WHITE_CONCRETE, M.LIGHT_BLUE_CONCRETE, M.SEA_LANTERN), 22,
+            arrayOf(Deco(M.SHORT_GRASS, 20), Deco(M.AZURE_BLUET, 8), Deco(M.FLOWERING_AZALEA, 4)),
+            arrayOf(Deco(M.GLOW_LICHEN, 10)), 1, 18
+        ),
+        CaveStyle(
+            "sunken_ruins", arrayOf(M.MOSSY_STONE_BRICKS, M.CRACKED_STONE_BRICKS, M.COBBLESTONE, M.MOSS_BLOCK),
+            arrayOf(M.STONE_BRICKS, M.MOSSY_STONE_BRICKS), 32,
+            arrayOf(Deco(M.MOSS_CARPET, 18), Deco(M.COBWEB, 5), Deco(M.CANDLE, 3, "[candles=2,lit=true]")),
+            arrayOf(Deco(M.VINE, 8))
+        ),
+        CaveStyle(
+            "crystal_river", arrayOf(M.PRISMARINE, M.PRISMARINE_BRICKS, M.CLAY, M.SAND),
+            arrayOf(M.PRISMARINE, M.SEA_LANTERN, M.LIGHT_BLUE_STAINED_GLASS), 28,
+            arrayOf(Deco(M.SEAGRASS, 12), Deco(M.SEA_PICKLE, 8)),
+            arrayOf(Deco(M.GLOW_LICHEN, 8)), 1, 12
+        ),
+        CaveStyle(
+            "lavender_dream", arrayOf(M.PURPLE_CONCRETE, M.MAGENTA_TERRACOTTA, M.MOSS_BLOCK, M.CLAY),
+            arrayOf(M.PURPLE_CONCRETE, M.AMETHYST_BLOCK, M.SHROOMLIGHT), 25,
+            arrayOf(Deco(M.ALLIUM, 12), Deco(M.LILAC, 8), Deco(M.MOSS_CARPET, 12)),
+            arrayOf(Deco(M.SPORE_BLOSSOM, 5)), 1, 15
+        ),
+        CaveStyle(
+            "echoing_library", arrayOf(M.BOOKSHELF, M.DEEPSLATE_TILES, M.POLISHED_DEEPSLATE, M.OAK_PLANKS),
+            arrayOf(M.DEEPSLATE_BRICKS, M.BOOKSHELF, M.SOUL_LANTERN), 24,
+            arrayOf(Deco(M.CANDLE, 5, "[candles=2,lit=true]"), Deco(M.COBWEB, 8)),
+            arrayOf(Deco(M.COBWEB, 12))
+        ),
+        CaveStyle(
+            "mushroom_rain", arrayOf(M.MYCELIUM, M.MOSS_BLOCK, M.PODZOL, M.MUD),
+            arrayOf(M.MOSS_BLOCK, M.SHROOMLIGHT, M.WARPED_WART_BLOCK), 20,
+            arrayOf(Deco(M.RED_MUSHROOM, 13), Deco(M.BROWN_MUSHROOM, 13), Deco(M.FERN, 8)),
+            arrayOf(Deco(M.SPORE_BLOSSOM, 7)), 2, 24
+        ),
+        CaveStyle(
+            "ancient_observatory", arrayOf(M.POLISHED_TUFF, M.TUFF_BRICKS, M.CALCITE, M.COPPER_BLOCK),
+            arrayOf(M.POLISHED_TUFF, M.COPPER_BLOCK, M.END_ROD), 30,
+            arrayOf(Deco(M.LANTERN, 5), Deco(M.COPPER_GRATE, 7)),
+            arrayOf(Deco(M.END_ROD, 4, DOWN))
+        ),
+        CaveStyle("sunken_grove", arrayOf(M.MOSS_BLOCK, M.MUD, M.ROOTED_DIRT, M.CLAY), arrayOf(M.MOSS_BLOCK, M.OAK_LOG), 28, arrayOf(Deco(M.FERN, 14), Deco(M.VINE, 8)), emptyArray(), 2, 18),
+        CaveStyle("rainbow_geode", arrayOf(M.CALCITE, M.AMETHYST_BLOCK, M.PURPLE_CONCRETE), arrayOf(M.AMETHYST_BLOCK, M.BUDDING_AMETHYST), 48, arrayOf(Deco(M.AMETHYST_CLUSTER, 14, UP)), arrayOf(Deco(M.AMETHYST_CLUSTER, 12, DOWN))),
+        CaveStyle("moonlit_marsh", arrayOf(M.MUD, M.MUDDY_MANGROVE_ROOTS, M.CLAY, M.MOSS_BLOCK), arrayOf(M.MUD, M.MANGROVE_ROOTS), 25, arrayOf(Deco(M.BLUE_ORCHID, 8), Deco(M.SEAGRASS, 8)), arrayOf(Deco(M.GLOW_LICHEN, 8)), 1, 16),
+        CaveStyle("obsidian_cathedral", arrayOf(M.OBSIDIAN, M.CRYING_OBSIDIAN, M.BLACKSTONE), arrayOf(M.OBSIDIAN, M.POLISHED_BLACKSTONE, M.END_ROD), 35, arrayOf(Deco(M.SOUL_FIRE, 2))),
+        CaveStyle("copper_rain", arrayOf(M.COPPER_BLOCK, M.EXPOSED_COPPER, M.WEATHERED_COPPER, M.OXIDIZED_COPPER), arrayOf(M.CUT_COPPER, M.COPPER_GRATE), 36, arrayOf(Deco(M.LIGHTNING_ROD, 2, UP))),
+        CaveStyle("forgotten_station", arrayOf(M.POLISHED_DEEPSLATE, M.RAIL, M.COBBLESTONE, M.GRAVEL), arrayOf(M.DEEPSLATE_TILES, M.IRON_BLOCK), 30, arrayOf(Deco(M.RAIL, 12), Deco(M.LANTERN, 4))),
+        CaveStyle("pink_sanctum", arrayOf(M.PINK_TERRACOTTA, M.PINK_CONCRETE, M.QUARTZ_BLOCK), arrayOf(M.PINK_CONCRETE, M.QUARTZ_BLOCK, M.SEA_LANTERN), 28, arrayOf(Deco(M.PINK_TULIP, 10), Deco(M.PEONY, 6))),
+        CaveStyle("teal_corridors", arrayOf(M.CYAN_TERRACOTTA, M.CYAN_CONCRETE, M.PRISMARINE), arrayOf(M.CYAN_CONCRETE, M.SEA_LANTERN), 32, arrayOf(Deco(M.SEA_PICKLE, 8))),
+        CaveStyle("golden_chasm", arrayOf(M.SANDSTONE, M.CUT_SANDSTONE, M.GOLD_BLOCK), arrayOf(M.SANDSTONE, M.GOLD_BLOCK), 35, arrayOf(Deco(M.TORCH, 5))),
+        CaveStyle("blue_ice_palace", arrayOf(M.PACKED_ICE, M.BLUE_ICE, M.SNOW_BLOCK), arrayOf(M.BLUE_ICE, M.PACKED_ICE), 52, arrayOf(Deco(M.POWDER_SNOW, 5))),
+        CaveStyle("red_lichen_rift", arrayOf(M.RED_TERRACOTTA, M.NETHERRACK, M.RED_SANDSTONE), arrayOf(M.NETHERRACK, M.RED_TERRACOTTA), 40, arrayOf(Deco(M.RED_MUSHROOM, 8))),
+        CaveStyle("quiet_quarry", arrayOf(M.TUFF, M.GRAVEL, M.COBBLESTONE, M.STONE), arrayOf(M.TUFF, M.COBBLESTONE), 26, arrayOf(Deco(M.GRAVEL, 12))),
+        CaveStyle("mossy_aqueduct", arrayOf(M.MOSSY_STONE_BRICKS, M.PRISMARINE, M.CLAY, M.WATER), arrayOf(M.MOSSY_STONE_BRICKS, M.PRISMARINE), 30, arrayOf(Deco(M.SEAGRASS, 10)), emptyArray(), 1, 14),
+        CaveStyle("sapphire_depths", arrayOf(M.BLUE_TERRACOTTA, M.BLUE_CONCRETE, M.DEEPSLATE), arrayOf(M.BLUE_CONCRETE, M.LIGHT_BLUE_STAINED_GLASS), 30, arrayOf(Deco(M.GLOW_LICHEN, 10))),
+        CaveStyle("emerald_bower", arrayOf(M.EMERALD_BLOCK, M.MOSS_BLOCK, M.GRASS_BLOCK), arrayOf(M.EMERALD_BLOCK, M.LEAF_LITTER), 24, arrayOf(Deco(M.SHORT_GRASS, 18), Deco(M.FERN, 10)), emptyArray(), 2, 14),
+        CaveStyle("lavender_lake", arrayOf(M.PURPLE_TERRACOTTA, M.CLAY, M.SAND), arrayOf(M.PURPLE_STAINED_GLASS, M.AMETHYST_BLOCK), 24, arrayOf(Deco(M.LILY_PAD, 8))),
+        CaveStyle("hollow_mountain", arrayOf(M.STONE, M.ANDESITE, M.GRANITE, M.DIORITE), arrayOf(M.STONE, M.ANDESITE), 38),
+        CaveStyle("granite_ravine", arrayOf(M.GRANITE, M.POLISHED_GRANITE, M.TERRACOTTA), arrayOf(M.GRANITE, M.POLISHED_GRANITE), 42),
+        CaveStyle("diorite_skyway", arrayOf(M.DIORITE, M.POLISHED_DIORITE, M.QUARTZ_BLOCK), arrayOf(M.DIORITE, M.QUARTZ_BLOCK), 40, arrayOf(Deco(M.QUARTZ_SLAB, 8))),
+        CaveStyle("andesite_warrens", arrayOf(M.ANDESITE, M.POLISHED_ANDESITE, M.TUFF), arrayOf(M.ANDESITE, M.POLISHED_ANDESITE), 35),
+        CaveStyle("mudslide_caves", arrayOf(M.MUD, M.PACKED_MUD, M.CLAY), arrayOf(M.MUD, M.ROOTED_DIRT), 26, arrayOf(Deco(M.MANGROVE_PROPAGULE, 6))),
+        CaveStyle("dripstone_forest", arrayOf(M.DRIPSTONE_BLOCK, M.CALCITE, M.TUFF), arrayOf(M.DRIPSTONE_BLOCK, M.POINTED_DRIPSTONE), 45, arrayOf(Deco(M.POINTED_DRIPSTONE, 16, DRIP_UP)), arrayOf(Deco(M.POINTED_DRIPSTONE, 18, DRIP_DOWN))),
+        CaveStyle("echo_lake", arrayOf(M.DEEPSLATE, M.CLAY, M.GRAVEL), arrayOf(M.DEEPSLATE, M.SCULK), 30, arrayOf(Deco(M.SCULK_VEIN, 8))),
+        CaveStyle("sculk_garden", arrayOf(M.SCULK, M.SCULK_CATALYST, M.DEEPSLATE), arrayOf(M.SCULK, M.DEEPSLATE), 24, arrayOf(Deco(M.SCULK_SENSOR, 3))),
+        CaveStyle("warden_throne", arrayOf(M.SCULK, M.REINFORCED_DEEPSLATE, M.DEEPSLATE_TILES), arrayOf(M.REINFORCED_DEEPSLATE, M.SCULK), 45, arrayOf(Deco(M.SCULK_SHRIEKER, 2))),
+        CaveStyle("soul_sands", arrayOf(M.SOUL_SAND, M.SOUL_SOIL, M.BASALT), arrayOf(M.SOUL_SAND, M.BASALT, M.SOUL_LANTERN), 36, arrayOf(Deco(M.SOUL_FIRE, 3))),
+        CaveStyle("warped_canopy", arrayOf(M.WARPED_NYLIUM, M.WARPED_WART_BLOCK, M.SHROOMLIGHT), arrayOf(M.WARPED_WART_BLOCK, M.WARPED_STEM), 20, arrayOf(Deco(M.WARPED_FUNGUS, 10))),
+        CaveStyle("crimson_roots", arrayOf(M.CRIMSON_NYLIUM, M.NETHER_WART_BLOCK, M.NETHERRACK), arrayOf(M.NETHER_WART_BLOCK, M.CRIMSON_STEM), 25, arrayOf(Deco(M.CRIMSON_FUNGUS, 10))),
+        CaveStyle("netherite_seam", arrayOf(M.ANCIENT_DEBRIS, M.BLACKSTONE, M.BASALT), arrayOf(M.ANCIENT_DEBRIS, M.POLISHED_BLACKSTONE), 38),
+        CaveStyle("ashfall_basin", arrayOf(M.NETHERRACK, M.SOUL_SOIL, M.GRAVEL), arrayOf(M.BASALT, M.NETHERRACK), 35, arrayOf(Deco(M.GRAY_CARPET, 8))),
+        CaveStyle("chorus_grotto", arrayOf(M.END_STONE, M.PURPUR_BLOCK, M.PURPUR_PILLAR), arrayOf(M.END_STONE, M.PURPUR_BLOCK), 32, arrayOf(Deco(M.CHORUS_FLOWER, 8))),
+        CaveStyle("end_void", arrayOf(M.END_STONE, M.END_STONE_BRICKS, M.OBSIDIAN), arrayOf(M.END_STONE, M.OBSIDIAN), 28),
+        CaveStyle("starfall_cavern", arrayOf(M.BLACK_CONCRETE, M.PURPLE_CONCRETE, M.END_STONE), arrayOf(M.BLACK_CONCRETE, M.END_ROD), 24, arrayOf(Deco(M.END_ROD, 5, UP))),
+        CaveStyle("glass_sea", arrayOf(M.LIGHT_BLUE_STAINED_GLASS, M.CYAN_STAINED_GLASS, M.SAND), arrayOf(M.BLUE_STAINED_GLASS, M.SEA_LANTERN), 26, arrayOf(Deco(M.SEAGRASS, 12))),
+        CaveStyle("kelp_catacomb", arrayOf(M.PRISMARINE, M.CLAY, M.GRAVEL), arrayOf(M.PRISMARINE, M.SEA_LANTERN), 30, arrayOf(Deco(M.KELP, 14))),
+        CaveStyle("coral_vault", arrayOf(M.DEAD_TUBE_CORAL_BLOCK, M.TUBE_CORAL_BLOCK, M.PRISMARINE), arrayOf(M.TUBE_CORAL_BLOCK, M.SEA_LANTERN), 22, arrayOf(Deco(M.TUBE_CORAL, 8))),
+        CaveStyle("flooded_mines", arrayOf(M.COBBLESTONE, M.MOSSY_COBBLESTONE, M.GRAVEL), arrayOf(M.OAK_LOG, M.COBBLESTONE), 25, arrayOf(Deco(M.RAIL, 8)), emptyArray(), 1, 10),
+        CaveStyle("paper_halls", arrayOf(M.WHITE_CONCRETE, M.QUARTZ_BLOCK, M.SMOOTH_QUARTZ), arrayOf(M.WHITE_CONCRETE, M.SEA_LANTERN), 30),
+        CaveStyle("checkerboard_void", arrayOf(M.BLACK_CONCRETE, M.WHITE_CONCRETE, M.GRAY_CONCRETE), arrayOf(M.WHITE_CONCRETE, M.BLACK_CONCRETE), 28),
+        CaveStyle("empty_hotel", arrayOf(M.RED_CARPET, M.OAK_PLANKS, M.QUARTZ_BLOCK), arrayOf(M.WHITE_CONCRETE, M.SEA_LANTERN), 25, arrayOf(Deco(M.RED_CARPET, 10))),
+        CaveStyle("faded_arcade", arrayOf(M.MAGENTA_TERRACOTTA, M.CYAN_TERRACOTTA, M.BLACK_CONCRETE), arrayOf(M.MAGENTA_CONCRETE, M.CYAN_CONCRETE), 25, arrayOf(Deco(M.END_ROD, 4, UP))),
+        CaveStyle("fluorescent_tunnel", arrayOf(M.LIGHT_GRAY_CONCRETE, M.WHITE_CONCRETE, M.IRON_BLOCK), arrayOf(M.WHITE_CONCRETE, M.SEA_LANTERN), 32),
+        CaveStyle("abandoned_greenhouse", arrayOf(M.GRASS_BLOCK, M.DIRT, M.MOSS_BLOCK, M.GLASS), arrayOf(M.GLASS, M.MOSS_BLOCK), 18, arrayOf(Deco(M.VINE, 12), Deco(M.FERN, 12)), emptyArray(), 2, 20),
+        CaveStyle("overgrown_mall", arrayOf(M.MOSS_BLOCK, M.STONE, M.COBBLESTONE), arrayOf(M.MOSS_BLOCK, M.LEAF_LITTER), 20, arrayOf(Deco(M.SHORT_GRASS, 18), Deco(M.VINE, 10))),
+        CaveStyle("clockwork_cave", arrayOf(M.IRON_BLOCK, M.COPPER_BLOCK, M.POLISHED_TUFF), arrayOf(M.COPPER_BLOCK, M.IRON_BLOCK), 35, arrayOf(Deco(M.LIGHTNING_ROD, 3, UP))),
+        CaveStyle("library_of_moss", arrayOf(M.BOOKSHELF, M.MOSS_BLOCK, M.OAK_PLANKS), arrayOf(M.BOOKSHELF, M.MOSS_BLOCK), 22, arrayOf(Deco(M.MOSS_CARPET, 18), Deco(M.COBWEB, 6))),
+        CaveStyle("candle_cathedral", arrayOf(M.DEEPSLATE_BRICKS, M.STONE_BRICKS, M.CANDLE), arrayOf(M.STONE_BRICKS, M.DEEPSLATE_BRICKS), 30, arrayOf(Deco(M.CANDLE, 12, "[candles=4,lit=true]"))),
+        CaveStyle("white_noise_caves", arrayOf(M.SNOW_BLOCK, M.WHITE_CONCRETE, M.CALCITE), arrayOf(M.WHITE_CONCRETE, M.SNOW_BLOCK), 34, arrayOf(Deco(M.SNOW, 8))),
+        CaveStyle("green_noise_caves", arrayOf(M.MOSS_BLOCK, M.GREEN_CONCRETE, M.LIME_TERRACOTTA), arrayOf(M.GREEN_CONCRETE, M.MOSS_BLOCK), 30, arrayOf(Deco(M.SHORT_GRASS, 14))),
+        CaveStyle("mirror_grotto", arrayOf(M.POLISHED_BLACKSTONE, M.LIGHT_BLUE_STAINED_GLASS, M.OBSIDIAN), arrayOf(M.TINTED_GLASS, M.OBSIDIAN), 28),
+        CaveStyle("hanging_gardens", arrayOf(M.MOSS_BLOCK, M.DIRT, M.GRASS_BLOCK), arrayOf(M.MOSS_BLOCK, M.OAK_LEAVES), 20, arrayOf(Deco(M.AZALEA, 10), Deco(M.VINE, 10)), arrayOf(Deco(M.HANGING_ROOTS, 10)), 2, 24),
+        CaveStyle("fairy_ring", arrayOf(M.MYCELIUM, M.MOSS_BLOCK, M.PODZOL), arrayOf(M.SHROOMLIGHT, M.MOSS_BLOCK), 18, arrayOf(Deco(M.RED_MUSHROOM, 18), Deco(M.BROWN_MUSHROOM, 18))),
+        CaveStyle("sunken_temple", arrayOf(M.SANDSTONE, M.PRISMARINE, M.MOSSY_STONE_BRICKS), arrayOf(M.SANDSTONE, M.PRISMARINE), 34, arrayOf(Deco(M.LANTERN, 5))),
+        CaveStyle("cracked_sanctuary", arrayOf(M.CRACKED_STONE_BRICKS, M.CRACKED_DEEPSLATE_TILES, M.COBBLESTONE), arrayOf(M.CRACKED_STONE_BRICKS, M.MOSSY_STONE_BRICKS), 30, arrayOf(Deco(M.COBWEB, 10))),
+        CaveStyle("lost_cistern", arrayOf(M.CLAY, M.MOSSY_COBBLESTONE, M.PRISMARINE), arrayOf(M.MOSSY_COBBLESTONE, M.PRISMARINE), 30, arrayOf(Deco(M.SEAGRASS, 8))),
     )
 
     init {
@@ -298,7 +407,7 @@ object CaveStyles {
         ALL[29].withOres(15, I, G)
         ALL[30].withOres(20, G, G, G, G, G, G, G, D)
         ALL[31].withOres(15, C, L)
-        require(ALL.size == 32) { "CaveStyles.ALL debe tener 32 estilos" }
+        require(ALL.size == 95) { "CaveStyles.ALL debe tener 95 estilos" }
     }
 
     val BIOMES: List<String> = ALL.map { it.biome }

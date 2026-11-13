@@ -19,8 +19,8 @@ object Stronghold {
     fun center(seed: Long, gx: Int, gz: Int): IntArray? {
         val h = mix(seed, gx, gz, 220)
         if (h % 100 >= 35) return null
-        val cx = gx * CELL + 200 + (h shr 6) % (CELL - 400)
-        val cz = gz * CELL + 200 + (h shr 16) % (CELL - 400)
+        val cx = gx * CELL + 200 + (h ushr 6) % (CELL - 400)
+        val cz = gz * CELL + 200 + (h ushr 16) % (CELL - 400)
         if (zoneAt(seed, cx, cz) != Zone.JUNGLE) return null
         val s = Terrain.heightAt(seed, cx, cz)
         if (s < SEA_LEVEL + 3 || s > 110) return null
@@ -69,7 +69,9 @@ object Stronghold {
     }
 
     private fun corridor(p: Place, random: Random, ax: Int, az: Int, y0: Int, alongX: Boolean) {
-        for (a in 0 until 6) for (b in 0 until 5) {
+        // Vanilla stronghold halls are five blocks wide, with a solid floor and
+        // ceiling and a three-block-high passage between the side walls.
+        for (a in 0 until 7) for (b in 0 until 5) {
             val x = if (alongX) ax + a else ax + b
             val z = if (alongX) az + b else az + a
             val side = b == 0 || b == 4
@@ -106,13 +108,20 @@ object Stronghold {
         val kind = if (i == 1 && j == 1) -1 else mix(seed, c[0] + i, c[1] + j, 222) % 6
         when (kind) {
             -1 -> portalRoom(p, random, cx, cz, y0)
-            0 -> { 
-                for (dx in 2..11) for (y in 1..2) {
+            0 -> {
+                // Two-storey library: shelves surround a reading floor and the
+                // central aisle remains open like the vanilla stronghold library.
+                for (dx in 1..4) for (y in 1..3) {
                     p.set(ox + dx, y0 + y, oz + 1, Material.BOOKSHELF)
                     p.set(ox + dx, y0 + y, oz + 12, Material.BOOKSHELF)
                 }
-                p.set(cx, y0 + 1, cz, Material.OAK_FENCE)
-                p.set(cx, y0 + 2, cz, Material.OAK_PRESSURE_PLATE)
+                for (dx in 9..12) for (y in 1..3) {
+                    p.set(ox + dx, y0 + y, oz + 1, Material.BOOKSHELF)
+                    p.set(ox + dx, y0 + y, oz + 12, Material.BOOKSHELF)
+                }
+                for (dz in 3..10 step 2) for (y in 1..2)
+                    p.set(ox + 2, y0 + y, oz + dz, Material.BOOKSHELF)
+                p.put(cx, y0 + 1, cz, Material.LECTERN, "[facing=south]")
                 if (Loot.rare(random, 70.0)) Loot.chestAt(p, random, ox + 3, y0 + 1, oz + 6, "salon")
             }
             1 -> { 
@@ -152,13 +161,18 @@ object Stronghold {
     }
 
     private fun portalRoom(p: Place, random: Random, cx: Int, cz: Int, y0: Int) {
-        for (dx in -1..1) for (dz in -1..1) p.set(cx + dx, y0, cz + dz, Material.LAVA)
+        for (dx in -1..1) for (dz in -1..1) {
+            p.set(cx + dx, y0, cz + dz, Material.LAVA)
+            p.set(cx + dx, y0 - 1, cz + dz, Material.STONE_BRICKS)
+        }
         for (k in -1..1) {
             frame(p, random, cx + k, y0 + 1, cz - 2, "south")
             frame(p, random, cx + k, y0 + 1, cz + 2, "north")
             frame(p, random, cx - 2, y0 + 1, cz + k, "east")
             frame(p, random, cx + 2, y0 + 1, cz + k, "west")
         }
+        for (dx in -3..3) for (dz in intArrayOf(-4, 4))
+            p.set(cx + dx, y0 + 1, cz + dz, Material.IRON_BARS)
         for (dx in -3..3) p.set(cx + dx, y0 + 1, cz - 5, Material.STONE_BRICKS) 
         p.spawner(cx, y0 + 2, cz - 5, EntityType.SILVERFISH)
     }
@@ -209,7 +223,9 @@ object Classics {
         val z0 = bz + 3 + random.nextInt(6)
         val surface = gen.heightAt(seed, x0 + 3, z0 + 3)
         if (surface < 40) return
-        val y0 = maxOf(10, surface - 12 - random.nextInt(10))
+        // Keep the room in the normal underground band instead of intersecting
+        // the surface on low hills.
+        val y0 = maxOf(10, minOf(surface - 8, surface - 12 - random.nextInt(10)))
         for (dx in 0..6) for (dz in 0..6) for (y in y0..y0 + 5) {
             val edge = dx == 0 || dx == 6 || dz == 0 || dz == 6 || y == y0 || y == y0 + 5
             val m = if (edge) (if (random.nextInt(100) < 35) Material.MOSSY_COBBLESTONE else Material.COBBLESTONE) else Material.AIR
@@ -232,7 +248,7 @@ object Classics {
             val x = if (alongX) x0 + a else x0 + b
             val z = if (alongX) z0 + b else z0 + a
             for (yy in y + 1..y + 3) p.set(x, yy, z, Material.AIR)
-            if (p.isAir(x, y, z) || random.nextInt(100) < 30) p.set(x, y, z, Material.OAK_PLANKS)
+            p.set(x, y, z, Material.OAK_PLANKS)
             if (a % 4 == 0) { 
                 if (b != 1) for (yy in y + 1..y + 2) p.set(x, yy, z, Material.OAK_FENCE)
                 p.set(x, y + 3, z, Material.OAK_PLANKS)
@@ -261,7 +277,7 @@ object Classics {
         }
         for (dx in 0..3) for (dy in 0..4) {
             val edge = dx == 0 || dx == 3 || dy == 0 || dy == 4
-            if (!edge || random.nextInt(100) < 28) continue
+            if (!edge || random.nextInt(100) < 18) continue
             p.set(x0 + 1 + dx, low + 1 + dy, z0 + 2, if (random.nextInt(100) < 20) Material.CRYING_OBSIDIAN else Material.OBSIDIAN)
         }
         if (random.nextInt(100) < 40) p.set(x0 + 2, low, z0 + 1, Material.GOLD_BLOCK)
@@ -301,6 +317,8 @@ object Classics {
         val x0 = bx + 2
         val z0 = bz + 2
         val low = Sites.flatBase(seed, gen, x0, z0, 21, 21, 1, 3) ?: return
+        // Desert temples taper to a four-block cap; leave a real hollow
+        // interior rather than producing a solid pyramid.
         for (k in 0..9) {
             val size = 21 - 2 * k
             for (dx in 0 until size) for (dz in 0 until size) {
@@ -310,7 +328,7 @@ object Classics {
             }
         }
         
-        for (dx in 8..12) for (dz in 8..12) for (y in 1..4) p.set(x0 + dx, low + y, z0 + dz, Material.AIR)
+        for (dx in 7..13) for (dz in 7..13) for (y in 1..8) p.set(x0 + dx, low + y, z0 + dz, Material.AIR)
         for (dx in 9..11) for (y in 1..3) for (dz in 13..20) p.set(x0 + dx, low + y, z0 + dz, Material.AIR)
         for (dx in 8..12) for (dz in 8..12) p.set(x0 + dx, low, z0 + dz, if ((dx + dz) % 2 == 0) Material.CHISELED_SANDSTONE else Material.SMOOTH_SANDSTONE)
         for ((cx, cz) in listOf(8 to 8, 12 to 8, 8 to 12, 12 to 12)) Loot.chestAt(p, random, x0 + cx, low + 1, z0 + cz, "tower")
