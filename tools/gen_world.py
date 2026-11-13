@@ -96,6 +96,11 @@ surf("silent_boulevard",0.5,0.3,True,"a0a4a8","c4c8cc","70808a","303a40","7a8470
 surf("rust_meadow",0.7,0.2,False,"8a6a58","b0907a","6a7a78","2e3a38","9a8a50","7e7440","ACACIA_LOG","DRY","SAVANNA","ACACIA","TREE",2,"gloom",None,None,"gloom")
 surf("hollow_mist",0.4,0.8,True,"aab4b8","d0d8da","6a8890","2a4048","8a9a88","6a8070","SPRUCE_LOG","COLD","TAIGA","REDWOOD","TALL_REDWOOD",12,"gloom",None,("white_ash",0.006),"gloom")
 surf("requiem_heath",0.4,0.4,True,"575a66","777a84","5a5a68","24223a","6f7068","5a5a58","DARK_OAK_LOG","COLD","PLAINS","TREE","TREE",3,"gloom,bare",None,("ash",0.004),"gloom")
+surf("snowy_apocalypse",0.15,0.35,True,"dcecff","f4f8ff","9fc7d8","50788e","d6e8d0","b0c8b0","SPRUCE_LOG","COLD","SNOWY_PLAINS","REDWOOD","TALL_REDWOOD",3,"cold",{"monster":cr(("stray",50,2,4))},("snowflake",0.004),"gloom")
+surf("foggy_woods",0.25,0.7,True,"c6d6d8","e4eff0","7d9a8f","49665e","8eae78","6d8e62","SPRUCE_LOG","COLD","TAIGA","REDWOOD","TALL_REDWOOD",20,"cold",None,("white_ash",0.008),"gloom")
+surf("dreamcore_meadow",0.75,0.35,True,"d9ecff","f5fbff","75a9bc","345d6d","a6d68d","82b86b","OAK_LOG","WILD","MEADOW","TREE","BIG_TREE",3,"",{"creature":cr(("rabbit",12,2,3),("bee",10,2,3))},None,"surface",24)
+surf("liminal_parkland",0.6,0.25,True,"e0ebee","f8fbf8","83a7a5","476866","a8c58e","7fa56e","BIRCH_LOG","WHITE","BIRCH_FOREST","BIRCH","TREE",5,"",{"creature":cr(("rabbit",12,2,3))},None,"surface",18)
+surf("sunlit_woods",0.8,0.45,True,"d8f0ff","f8ffff","6fa5ae","345c68","9bd080","76ad63","OAK_LOG","WILD","FOREST","TREE","BIRCH",10,"",{"creature":cr(("bee",12,2,3))},None,"surface",14)
 
                                                                           
                  
@@ -110,7 +115,7 @@ surf("cornflower_haze",0.55,0.45,True,"aebcc4","c8d2d6","4f7384","1f3744","8fa38
                
 surf("quiet_suburbia",0.6,0.35,True,"b8c2c6","d0d8da",W_,WF,"8fa070","6f8650","OAK_LOG","WILD","PLAINS","TREE","BIRCH",3,"",{"creature":cr(("rabbit",10,2,3))},None,"surface",8)
 surf("cul_de_sac",0.6,0.35,True,"bcc4c4","d4dad8",W_,WF,"94a674","74905a","BIRCH_LOG","WHITE","PLAINS","BIRCH","TREE",2,"",{"creature":cr(("rabbit",10,2,3))},None,"surface",8)
-assert len(S) == 45, len(S)
+assert len(S) == 50, len(S)
 
                                   
 add("still_lake",0.6,0.6,True,"b0bbbd","c8d0cf","4a7080","213f4a","7f9360","5f7d48",prof="water")
@@ -184,7 +189,70 @@ add("fossil_cavern",0.9,0.0,False,"4a4030","4a4030","60a0a8","28585e","b0a070","
 add("salt_caverns",0.7,0.0,False,"b0b0b8","b0b0b8","80b0c8","3a6078","c8c8c8","a8a8a8",prof="cave")
 add("ember_cavity",1.5,0.0,False,"3a1008","501a0c","d07030","702808","7a4a28","603820",("ash",0.005),prof="cave",extra={"monster":cr(("magma_cube",30,2,3))})
 add("bamboo_grotto",0.8,0.7,False,"14301a","14301a","40c088","106040","6aa850","4a8a38",("spore_blossom_air",0.003),prof="cave",extra={"creature":cr(("panda",6,1,2))})
-assert len(B) == 106, len(B)
+add("nostalgia_valley",0.9,0.7,False,"d8f4ff","f8ffff","75c8b0","2e806c","9ee878","70c85a",("spore_blossom_air",0.006),prof="cave",extra={"creature":cr(("rabbit",12,2,3),("bee",10,2,3))})
+add("cloud_gardens",0.95,0.7,False,"e8f7ff","ffffff","a0e8d0","4a9f82","b8f090","82c86c",("end_rod",0.004),prof="cave",extra={"creature":cr(("bee",16,2,3),("rabbit",8,2,3))})
+add("sunken_ruins",0.6,0.2,False,"526878","71828c","6faaa0","294f50","759a68","52764e",("ash",0.003),prof="cave",extra={"monster":cr(("zombie",70,2,4),("skeleton",50,2,4))})
+add("crystal_river",0.85,0.8,False,"8edcff","d8ffff","30e0e0","087c8a","78d890","42b878",("end_rod",0.005),prof="cave",extra={"creature":cr(("axolotl",18,4,4))})
+add("lavender_dream",0.8,0.5,False,"c8b8ff","f4e8ff","b080e0","553080","d8a8e8","a878c8",("spore_blossom_air",0.005),prof="cave",extra={"creature":cr(("allay",8,1,2))})
+add("echoing_library",0.45,0.0,False,"24263a","3e4054","706a94","2d2946","6a7088","4e5268",("ash",0.003),prof="cave",extra={"monster":cr(("skeleton",80,2,4),("silverfish",40,1,2))})
+add("mushroom_rain",0.75,0.7,False,"36234a","5c3a6a","9a70d0","4a2d70","a88a78","806050",("warped_spore",0.006),prof="cave",extra={"creature":cr(("mooshroom",14,4,8))})
+add("ancient_observatory",0.65,0.2,False,"39424a","65747a","8ab8b8","365c60","a0ba8a","70886a",("end_rod",0.004),prof="cave",extra={"monster":cr(("enderman",12,1,2),("skeleton",50,2,4))})
+add("sunken_grove",0.8,0.7,False,"203c38","38584c","4aa890","1d604c","72b85c","4d8c46",("spore_blossom_air",0.004),prof="cave",extra={"creature":cr(("axolotl",10,4,4))})
+add("rainbow_geode",0.7,0.3,False,"302060","503c90","b080ff","5a38a0","b080e8","9060c8",("end_rod",0.005),prof="cave")
+add("moonlit_marsh",0.5,0.9,False,"18283a","30465a","4a8890","1e4a58","66885c","4c6848",("glow_lichen",0.004),prof="cave")
+add("obsidian_cathedral",0.2,0.0,False,"100814","1c1028","6840a0","2a1648","54406c","40304f",("soul_fire_flame",0.003),prof="deep")
+add("copper_rain",0.6,0.2,False,"28382e","486050","50c8a0","287060","8ca86c","648450",("end_rod",0.003),prof="cave")
+add("forgotten_station",0.4,0.0,False,"202830","384550","5a8490","2b4650","69785e","505e48",("ash",0.003),prof="cave",extra={"monster":cr(("zombie",80,2,4),("cave_spider",25,2,4))})
+add("pink_sanctum",0.8,0.2,False,"552d54","805878","e090c8","6a2e68","d09ab0","b878a0",("end_rod",0.003),prof="cave")
+add("teal_corridors",0.7,0.3,False,"143b42","28626a","38d8d0","187f82","70c8a0","4ca878",("end_rod",0.003),prof="cave")
+add("golden_chasm",1.0,0.0,False,"49351c","70522c","e0b040","8a6428","c8a060","a08048",prof="cave")
+add("blue_ice_palace",0.0,0.0,False,"5688c0","86b8e0","60d8ff","2868b0","b0d8f0","90b8d8",("snowflake",0.004),prof="cave",extra={"monster":cr(("stray",50,2,4))})
+add("red_lichen_rift",0.9,0.1,False,"431b18","733020","d05a50","733020","a06048","784038",("warped_spore",0.003),prof="cave")
+add("quiet_quarry",0.5,0.0,False,"30383c","4c5558","668e98","304a50","82906c","687454",prof="cave")
+add("mossy_aqueduct",0.7,0.8,False,"1b3d3d","345c58","38bfc0","185e68","6eae68","4c884e",("end_rod",0.003),prof="cave",extra={"creature":cr(("axolotl",16,4,4))})
+add("sapphire_depths",0.4,0.0,False,"101e4c","223b78","4878e8","202e80","587ab0","405c98",("end_rod",0.003),prof="deep")
+add("emerald_bower",0.8,0.7,False,"163b28","2d6840","60d8a0","287050","78c870","4c9848",("spore_blossom_air",0.004),prof="cave",extra={"creature":cr(("bee",12,2,3))})
+add("lavender_lake",0.7,0.7,False,"34274c","604d78","8c98e0","484e90","9c8ac0","7868a0",("end_rod",0.003),prof="cave",extra={"creature":cr(("axolotl",12,4,4))})
+add("hollow_mountain",0.5,0.2,False,"34383c","586066","748c98","384c58","888c78","68745e",prof="cave")
+add("granite_ravine",0.7,0.1,False,"422c28","70463c","b07868","633a38","a08060","806048",prof="cave")
+add("diorite_skyway",0.7,0.1,False,"646a74","8c949c","c0d0e0","68788c","b0b0a8","909098",("end_rod",0.003),prof="cave")
+add("andesite_warrens",0.5,0.2,False,"3c4448","687478","7898a0","3e5a62","849080","68705f",prof="cave")
+add("mudslide_caves",0.8,0.8,False,"332a24","5c493c","769c88","3a554a","8b8358","6a6848",prof="cave")
+add("dripstone_forest",0.7,0.4,False,"30281e","554331","7c9a9e","405460","9c8058","786044",prof="cave")
+add("echo_lake",0.4,0.5,False,"121a28","28364a","3a7898","183a5a","536878","3e5068",("glow_lichen",0.004),prof="deep")
+add("sculk_garden",0.2,0.0,False,"07171c","102a34","1c6370","0a3038","315c62","24484e",prof="deep")
+add("warden_throne",0.1,0.0,False,"02080c","071419","124452","061e28","203b42","193038",prof="deep",extra={"monster":cr(("warden",5,1,1))})
+add("soul_sands",0.2,0.0,False,"171724","302d43","605078","28283e","514c5c","3d3a48",("soul_fire_flame",0.004),prof="deep")
+add("warped_canopy",0.6,0.6,False,"0b3030","145555","39c8b0","17685f","5cc891","3e9a72",("warped_spore",0.005),prof="deep",extra={"creature":cr(("enderman",15,1,2))})
+add("crimson_roots",0.9,0.3,False,"3a1018","6a1e2c","c04c58","6a1f2e","8e4a42","6c3435",("crimson_spore",0.005),prof="deep")
+add("netherite_seam",0.3,0.0,False,"101016","25222a","686070","25252c","57545c","45434c",prof="deep")
+add("ashfall_basin",0.4,0.0,False,"201c20","3a3438","686068","2f2c32","696054","504a45",("ash",0.006),prof="deep")
+add("chorus_grotto",0.5,0.0,False,"1e173a","382d60","9878d8","4e3a8a","8c7caa","685c88",("end_rod",0.005),prof="deep",extra={"monster":cr(("enderman",50,1,3))})
+add("end_void",0.2,0.0,False,"080812","121225","4b3b76","18183c","4b4260","37334e",prof="deep")
+add("starfall_cavern",0.4,0.0,False,"090b20","171b3d","6680f0","26306e","5c68a0","464e7c",("end_rod",0.008),prof="deep")
+add("glass_sea",0.8,0.8,False,"143d5c","266b82","6bd8ef","24698a","6ac8b0","48a88c",("end_rod",0.003),prof="cave",extra={"creature":cr(("glow_squid",15,2,4))})
+add("kelp_catacomb",0.6,0.9,False,"102b35","1b4e56","329eaa","164d5d","4d9d70","327b5b",prof="cave",extra={"creature":cr(("drowned",40,2,4))})
+add("coral_vault",0.8,0.9,False,"25434a","3c7070","54d8cc","247b80","75c88d","4f9e72",("end_rod",0.003),prof="cave",extra={"creature":cr(("tropical_fish",18,3,6))})
+add("flooded_mines",0.5,0.8,False,"162830","2c5054","3d9aa0","1b535e","62876a","49644e",prof="cave",extra={"monster":cr(("drowned",60,2,4),("cave_spider",30,2,4))})
+add("paper_halls",0.7,0.0,False,"b9c9ce","d8e4e6","91c9d0","467b86","b4d69b","8eb878",("end_rod",0.003),prof="cave")
+add("checkerboard_void",0.3,0.0,False,"20232a","383c48","687e94","303a4e","687a68","4f5c50",prof="cave")
+add("empty_hotel",0.5,0.0,False,"48404a","70626c","8c8790","46404b","7d766c","625b58",("end_rod",0.002),prof="cave")
+add("faded_arcade",0.7,0.2,False,"492d54","754b78","d070c8","6f3a78","a080a0","806080",("end_rod",0.006),prof="cave")
+add("fluorescent_tunnel",0.6,0.0,False,"89989a","c4d2d0","8ad8d0","4d8884","9eb78c","778b6d",("end_rod",0.005),prof="cave")
+add("abandoned_greenhouse",0.8,0.8,False,"2e593d","4b8660","5bbba5","28705b","84c86c","5c9e50",("spore_blossom_air",0.005),prof="cave",extra={"creature":cr(("bee",15,2,3))})
+add("overgrown_mall",0.7,0.7,False,"263b31","42644a","4b9c82","235d4f","78b06a","528449",("spore_blossom_air",0.004),prof="cave")
+add("clockwork_cave",0.5,0.1,False,"383c3c","59615c","71b8a0","3b6b60","a0a06c","78784e",("end_rod",0.003),prof="cave")
+add("library_of_moss",0.6,0.7,False,"243b32","3f5b4b","5da080","2d604c","79ad68","55854d",("spore_blossom_air",0.004),prof="cave")
+add("candle_cathedral",0.4,0.0,False,"292325","483b3c","9a6e68","4d3336","806d5d","63574c",("soul_fire_flame",0.002),prof="cave")
+add("white_noise_caves",0.0,0.0,False,"9caec0","d3e0e8","a8c8d8","5e7d90","c0d0c0","a8b8a8",("snowflake",0.004),prof="cave")
+add("green_noise_caves",0.7,0.8,False,"173b29","2c6542","45b88a","237057","72bb68","4e914c",("spore_blossom_air",0.004),prof="cave")
+add("mirror_grotto",0.2,0.0,False,"121a2d","293754","5d8bb0","2f4d70","687c88","4b5d70",("end_rod",0.004),prof="deep")
+add("hanging_gardens",0.8,0.8,False,"244c35","408062","62c89a","2e795e","8ccf78","5fa95b",("spore_blossom_air",0.006),prof="cave",extra={"creature":cr(("bee",16,2,3))})
+add("fairy_ring",0.8,0.7,False,"35284c","634a78","a883dc","543b82","9c9c78","787052",("warped_spore",0.006),prof="cave",extra={"creature":cr(("mooshroom",15,4,8))})
+add("sunken_temple",0.7,0.6,False,"263746","476576","5db5b8","2d6672","779c72","557a59",("end_rod",0.003),prof="cave")
+add("cracked_sanctuary",0.5,0.2,False,"2e2f30","4e5050","71888a","364a4e","757c62","5b624d",("ash",0.003),prof="cave")
+add("lost_cistern",0.7,0.8,False,"1d3740","35616a","4fbdb4","276f73","689b6b","4c7957",("end_rod",0.003),prof="cave",extra={"creature":cr(("axolotl",14,4,4))})
+assert len(B) == 174, len(B)
 
 
                                                                                                              
@@ -205,10 +273,27 @@ def dream(b, k):
     b["w"] = mixc(b["w"], 0x4aa6e8, k * 0.7)
     b["wf"] = mixc(b["wf"], 0x2a6ac8, k * 0.5)
 
+def pastel_lift(b):
+    if b["t"] < 0.35:
+        sky, fog, grass, fol = 0xc8dcff, 0xdce9f2, 0x9bc7a2, 0x78a987
+    elif b["t"] < 0.75:
+        sky, fog, grass, fol = 0xd6cfff, 0xe9e0f2, 0xb2c98a, 0x8eaa6c
+    else:
+        sky, fog, grass, fol = 0xffd9cf, 0xf5e4dc, 0xc5c887, 0xa2ac68
+    strength = 0.10 if b["prof"] in ("gloom", "deep", "flesh", "backrooms") else 0.16
+    b["sky"] = mixc(b["sky"], sky, strength)
+    b["fog"] = mixc(b["fog"], fog, strength * 0.75)
+    b["g"] = mixc(b["g"], grass, strength)
+    b["f"] = mixc(b["f"], fol, strength)
+    b["w"] = mixc(b["w"], 0x63b9df, strength * 0.65)
+    b["wf"] = mixc(b["wf"], 0x377cae, strength * 0.55)
+
 for (i, *_r) in S:
     dream(B[i], 0.42 if B[i]["prof"] == "gloom" else 0.75)
 for i in ("still_lake", "deep_lake", "marsh_water", "cold_water"):
     dream(B[i], 0.65)
+for b in B.values():
+    pastel_lift(b)
 
 def bj(b):
     eff = {"sky_color": b["sky"], "fog_color": b["fog"], "water_color": b["w"], "water_fog_color": b["wf"], "grass_color": b["g"], "foliage_color": b["f"]}
@@ -242,7 +327,7 @@ for (i, log, fl, fb, tree, alt, dens, fg, flora) in S:
         ", gloom = true" if "gloom" in fs else "", ", bare = true" if "bare" in fs else "", ", high = true" if "high" in fs else "",
         (", flora = %d" % flora) if flora != 6 else ""))
 names = [s[0].upper() for s in S]
-grid_names = names[:24]; high = names[24:26]; gloom = names[26:36]; garden = names[36:39]; flowers = names[39:43]; hood = names[43:45]
+grid_names = names[:24]; high = names[24:26]; gloom = names[26:41]; garden = names[41:44]; flowers = names[44:48]; hood = names[48:50]
 grid = ""
 k = 0
 for t in range(4):

@@ -66,6 +66,11 @@ enum class Climate(
     RUST_MEADOW("rust_meadow", Material.ACACIA_LOG, DRY, Biome.SAVANNA, TreeType.ACACIA, TreeType.TREE, 2, gloom = true),
     HOLLOW_MIST("hollow_mist", Material.SPRUCE_LOG, COLD, Biome.TAIGA, TreeType.REDWOOD, TreeType.TALL_REDWOOD, 12, gloom = true),
     REQUIEM_HEATH("requiem_heath", Material.DARK_OAK_LOG, COLD, Biome.PLAINS, TreeType.TREE, TreeType.TREE, 3, gloom = true, bare = true),
+    SNOWY_APOCALYPSE("snowy_apocalypse", Material.SPRUCE_LOG, COLD, Biome.SNOWY_PLAINS, TreeType.REDWOOD, TreeType.TALL_REDWOOD, 3, cold = true),
+    FOGGY_WOODS("foggy_woods", Material.SPRUCE_LOG, COLD, Biome.TAIGA, TreeType.REDWOOD, TreeType.TALL_REDWOOD, 20, cold = true),
+    DREAMCORE_MEADOW("dreamcore_meadow", Material.OAK_LOG, WILD, Biome.MEADOW, TreeType.TREE, TreeType.BIG_TREE, 3, flora = 24),
+    LIMINAL_PARKLAND("liminal_parkland", Material.BIRCH_LOG, WHITE, Biome.BIRCH_FOREST, TreeType.BIRCH, TreeType.TREE, 5, flora = 18),
+    SUNLIT_WOODS("sunlit_woods", Material.OAK_LOG, WILD, Biome.FOREST, TreeType.TREE, TreeType.BIRCH, 10, flora = 14),
     FORGOTTEN_GARDEN("forgotten_garden", Material.OAK_LOG, WILD, Biome.FLOWER_FOREST, TreeType.TREE, TreeType.BIG_TREE, 7, flora = 18),
     IVY_COURTYARD("ivy_courtyard", Material.DARK_OAK_LOG, WILD, Biome.FOREST, TreeType.TREE, TreeType.DARK_OAK, 9, flora = 14),
     WILD_ORCHARD("wild_orchard", Material.OAK_LOG, WILD, Biome.FOREST, TreeType.TREE, TreeType.BIG_TREE, 10, flora = 16),
@@ -83,7 +88,7 @@ enum class Climate(
             arrayOf(arrayOf(YELLOW_PLAINS, SCRUB_SAVANNA), arrayOf(MIXED_FOREST, DARK_OAK_FOREST), arrayOf(OVERGROWN_THICKET, DAMP_JUNGLE_EDGE)),
             arrayOf(arrayOf(DUST_FLATS, DRY_ACACIA_PLAIN), arrayOf(SUN_BLEACHED_GROVE, OLIVE_WOODLAND), arrayOf(HUMID_RAINFOREST, BLACK_BOG))
         )
-        val GLOOM: Array<Climate> = arrayOf(FROZEN_ESTATE, ASHEN_CATHEDRAL, GLOOMWOOD, GREY_MARSH, DEAD_ORCHARD, SOOT_FIELDS, SILENT_BOULEVARD, RUST_MEADOW, HOLLOW_MIST, REQUIEM_HEATH)
+        val GLOOM: Array<Climate> = arrayOf(FROZEN_ESTATE, ASHEN_CATHEDRAL, GLOOMWOOD, GREY_MARSH, DEAD_ORCHARD, SOOT_FIELDS, SILENT_BOULEVARD, RUST_MEADOW, HOLLOW_MIST, REQUIEM_HEATH, SNOWY_APOCALYPSE, FOGGY_WOODS, DREAMCORE_MEADOW, LIMINAL_PARKLAND, SUNLIT_WOODS)
         val GARDEN: Array<Climate> = arrayOf(FORGOTTEN_GARDEN, IVY_COURTYARD, WILD_ORCHARD)
         val FLOWERS: Array<Climate> = arrayOf(PALE_FLOWER_FIELDS, POPPY_MEADOW, DANDELION_PLAIN, CORNFLOWER_HAZE)
         val HOOD: Array<Climate> = arrayOf(QUIET_SUBURBIA, CUL_DE_SAC)

@@ -15,7 +15,7 @@ Developed by **notapossibilityofafuture**.
 | The Veil | Three extra dimensions: Dermis, Hypodermis and Muscle, generated from the same world seed. |
 | Cave Field | Large caves, tunnels, canyons, underground lakes, lava, geodes and themed cave biomes. |
 | Ruins and Cities | Abandoned towns, villages, roads, towers, apartments, suburbs, domes and industrial ruins. |
-| Biome Datapack | 106 custom biomes with custom colors, fog, particles, mob spawns and cave themes. |
+| Biome Datapack | 174 custom biomes with lightly colorful pastel palettes, dreamcore fog, particles, mob spawns and cave themes. |
 | Loot | Custom loot tables with equipment, enchanted books, rare items and themed supplies. |
 | Portals | Tears and portal platforms connect the surface with The Veil dimensions. |
 | Protection and Balance | Configurable mob rates, fauna density, chest rarity and structure spawning. |
@@ -83,14 +83,14 @@ caves: true
 chests: true
 chest-rarity: 1.0
 mobs: true
-classic-structures: true
-liminal-chance: 45
+classic-structures: false
+liminal-chance: 12
 world-size: 20000
 dome-spacing: 7000
-village-chance: 8
-town-chance: 8
-road-spacing: 1280
-vanilla-mix-chance: 25
+village-chance: 1
+town-chance: 1
+road-spacing: 3200
+vanilla-mix-chance: 40
 mob-spawn-rate: 0.25
 structure-mob-rate: 0.4
 fauna-density: 1.0
@@ -98,6 +98,11 @@ veil-dimensions: true
 ```
 
 See `src/main/resources/config.yml` for every available option.
+
+The default world profile leaves most regions as open wilderness, with themed
+zones and structures appearing less frequently. `vanilla-mix-chance` mixes
+vanilla biome identities into the custom generator; it does not switch terrain
+to vanilla height generation.
 
 ## Worldgen Editor
 
