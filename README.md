@@ -134,10 +134,11 @@ shrubs and trees. Terrain intentionally avoids the former extreme mountain
 peaks so settlements and vanilla-style structures can sit naturally on the
 landscape.
 
-The first level of The Veil (Dermis) also contains deterministic deepslate
-dungeons with rooms, corridors, loot chests and skeleton spawners. Their
+The first level of The Veil (Dermis) also contains deterministic adventure
+dungeons: a central hub, four side chambers, a lava bridge room, a boss-style
+final chamber, branching corridors, loot, lights and hostile spawners. Their
 locations are derived from the world seed, so the same seed always produces
-the same dungeon layout.
+the same layout.
 
 ## Worldgen Editor
 

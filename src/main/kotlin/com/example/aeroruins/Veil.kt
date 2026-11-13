@@ -87,7 +87,7 @@ class VeilGenerator(val layer: Int) : ChunkGenerator() {
     object DermisDungeons {
         private const val CELL = 192
         private const val FLOOR = DERMIS_F
-        private const val ROOM = 9
+        private const val CEILING = FLOOR + 14
 
         private fun center(seed: Long, gx: Int, gz: Int): IntArray? {
             if (Math.floorMod(mix(seed, gx, gz, 611), 100) >= 28) return null
@@ -97,9 +97,15 @@ class VeilGenerator(val layer: Int) : ChunkGenerator() {
         private fun contains(cx: Int, cz: Int, x: Int, z: Int): Boolean {
             val dx = abs(x - cx)
             val dz = abs(z - cz)
-            val room = (dx % 24 <= ROOM && dz % 24 <= ROOM)
-            val corridor = (dx <= 2 && dz <= 34) || (dz <= 2 && dx <= 34)
-            return room || corridor
+            val hub = dx <= 11 && dz <= 11
+            val north = dx <= 15 && dz in 27..49
+            val south = dx <= 15 && dz in -49..-27
+            val east = dx in 27..49 && dz <= 15
+            val west = dx in -49..-27 && dz <= 15
+            val boss = dx in 27..49 && dz in 27..49
+            val corridors = (dx <= 4 && dz <= 31) || (dz <= 4 && dx <= 31)
+            val bossCorridor = dx in 4..31 && dz in 4..8
+            return hub || north || south || east || west || boss || corridors || bossCorridor
         }
 
         fun carve(info: WorldInfo, data: ChunkData, x: Int, z: Int, wx: Int, wz: Int) {
@@ -108,11 +114,15 @@ class VeilGenerator(val layer: Int) : ChunkGenerator() {
             for (ix in gx - 1..gx + 1) for (iz in gz - 1..gz + 1) {
                 val c = center(info.seed, ix, iz) ?: continue
                 if (!contains(c[0], c[1], wx, wz)) continue
-                for (y in FLOOR - 1..FLOOR + 9) {
-                    val shell = y == FLOOR - 1 || y == FLOOR + 9
-                    data.setBlock(x, y, z, if (shell) Material.DEEPSLATE_BRICKS else Material.AIR)
+                val dx = wx - c[0]
+                val dz = wz - c[1]
+                val lavaRoom = dx in 27..49 && dz in 27..49 && !(dx in 35..39 && dz in 27..49)
+                for (y in FLOOR - 1..CEILING) {
+                    val shell = y == FLOOR - 1 || y == CEILING
+                    val floor = if (lavaRoom && y == FLOOR) Material.LAVA else Material.POLISHED_DEEPSLATE
+                    data.setBlock(x, y, z, if (shell) Material.DEEPSLATE_BRICKS else if (y == FLOOR) floor else Material.AIR)
                 }
-                data.setBlock(x, FLOOR, z, Material.POLISHED_DEEPSLATE)
+                if (!lavaRoom) data.setBlock(x, FLOOR, z, Material.POLISHED_DEEPSLATE)
             }
         }
 
@@ -120,13 +130,29 @@ class VeilGenerator(val layer: Int) : ChunkGenerator() {
             val gx = Math.floorDiv(bx + 8, CELL)
             val gz = Math.floorDiv(bz + 8, CELL)
             val c = center(seed, gx, gz) ?: return
-            val dx = c[0] - (bx + 8)
-            val dz = c[1] - (bz + 8)
-            if (abs(dx) > 10 || abs(dz) > 10) return
-            p.set(c[0], FLOOR + 1, c[1], Material.CHISELED_DEEPSLATE)
-            p.set(c[0], FLOOR + 2, c[1], Material.SOUL_LANTERN)
-            if (random.nextInt(100) < 70) Loot.chestAt(p, random, c[0] - 4, FLOOR + 1, c[1] - 4, "deep")
-            if (random.nextInt(100) < 45) p.spawner(c[0] + 4, FLOOR + 1, c[1] + 4, org.bukkit.entity.EntityType.SKELETON)
+            val r = Random(seed xor (c[0].toLong() shl 32) xor c[1].toLong())
+            fun inChunk(x: Int, z: Int): Boolean =
+                x in bx..bx + 15 && z in bz..bz + 15
+
+            for ((x, z) in listOf(
+                c[0] - 8 to c[1] - 8, c[0] + 8 to c[1] - 8,
+                c[0] - 8 to c[1] + 8, c[0] + 8 to c[1] + 8
+            )) if (inChunk(x, z)) {
+                p.set(x, FLOOR + 1, z, Material.CHISELED_DEEPSLATE)
+                p.set(x, FLOOR + 2, z, Material.SOUL_LANTERN)
+            }
+            if (inChunk(c[0], c[1])) {
+                p.set(c[0], FLOOR + 1, c[1], Material.GOLD_BLOCK)
+                p.put(c[0], FLOOR + 2, c[1], Material.LANTERN, "[hanging=false]")
+            }
+            if (inChunk(c[0] - 9, c[1] - 9) && random.nextInt(100) < 80)
+                Loot.chestAt(p, r, c[0] - 9, FLOOR + 1, c[1] - 9, "deep")
+            if (inChunk(c[0] + 9, c[1] - 9) && random.nextInt(100) < 65)
+                Loot.mobAt(p, c[0] + 9, FLOOR + 1, c[1] - 9, org.bukkit.entity.EntityType.MAGMA_CUBE)
+            if (inChunk(c[0] + 38, c[1] + 38) && random.nextInt(100) < 55)
+                p.spawner(c[0] + 38, FLOOR + 1, c[1] + 38, org.bukkit.entity.EntityType.SKELETON)
+            if (inChunk(c[0] + 42, c[1] + 42))
+                Loot.chestAt(p, r, c[0] + 42, FLOOR + 1, c[1] + 42, "nether")
         }
     }
 
