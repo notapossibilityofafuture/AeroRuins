@@ -4,7 +4,6 @@ import org.bukkit.util.noise.SimplexOctaveGenerator
 import java.util.Random
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.abs
-import kotlin.math.pow
 
 
 const val HIGH_Y = 100
@@ -17,8 +16,6 @@ object Terrain {
     private class Gens(seed: Long) {
         val cont = SimplexOctaveGenerator(Random(seed xor 0x7A1L), 3).also { it.setScale(0.0007) }
         val rough = SimplexOctaveGenerator(Random(seed xor 0x7B2L), 2).also { it.setScale(0.0022) }
-        val mountains = SimplexOctaveGenerator(Random(seed xor 0x7C3L), 2).also { it.setScale(0.0011) }
-        val ridge = SimplexOctaveGenerator(Random(seed xor 0x7D4L), 4).also { it.setScale(0.0016) }
         val detail = SimplexOctaveGenerator(Random(seed xor 0x7E5L), 5).also { it.setScale(0.011) }
         val riverOn = SimplexOctaveGenerator(Random(seed xor 0x7F6L), 2).also { it.setScale(0.0009) }
         val river = SimplexOctaveGenerator(Random(seed xor 0x807L), 2).also { it.setScale(0.0026) }
@@ -42,32 +39,24 @@ object Terrain {
         val c = g.cont.noise(fx, fz, 0.5, 0.5, true)
         val r = g.rough.noise(fx, fz, 0.5, 0.5, true)
         val d = g.detail.noise(fx, fz, 0.5, 0.5, true)
-        val amp = 2.5 + 9.5 * smooth((r + 0.25) / 0.9)
-        var h = SEA_LEVEL + 9 + c * 8 + d * amp
-
-        
-        val region = smooth((g.mountains.noise(fx, fz, 0.5, 0.5, true) - 0.05) / 0.3)
-        if (region > 0.0) {
-            val crest = 1.0 - abs(g.ridge.noise(fx, fz, 0.5, 0.5, true))
-            h += region * (10.0 + 82.0 * crest.pow(1.7))
-        }
+        val amp = 2.0 + 6.0 * smooth((r + 0.25) / 0.9)
+        var h = SEA_LEVEL + 8 + c * 6 + d * amp
+        h += smooth((r + 0.1) / 1.1) * 3.0
         h = maxOf(h, SEA_LEVEL + 2.0)
 
         
-        if (region < 0.25) {
-            val on = smooth((g.riverOn.noise(fx, fz, 0.5, 0.5, true) - 0.30) / 0.2)
-            if (on > 0.0) {
-                val rv = abs(g.river.noise(fx, fz, 0.5, 0.5, true))
-                val width = 0.012 * on
-                if (rv < width * 3.0) {
-                    val t = smooth((rv - width) / (width * 2.0))
-                    val bed = SEA_LEVEL - 2.0
-                    h = bed + (h - bed) * t
-                }
+        val on = smooth((g.riverOn.noise(fx, fz, 0.5, 0.5, true) - 0.30) / 0.2)
+        if (on > 0.0) {
+            val rv = abs(g.river.noise(fx, fz, 0.5, 0.5, true))
+            val width = 0.012 * on
+            if (rv < width * 3.0) {
+                val t = smooth((rv - width) / (width * 2.0))
+                val bed = SEA_LEVEL - 2.0
+                h = bed + (h - bed) * t
             }
-            val ln = g.lake.noise(fx, fz, 0.5, 0.5, true)
-            if (ln > 0.62) h -= smooth((ln - 0.62) / 0.12) * 16.0
         }
+        val ln = g.lake.noise(fx, fz, 0.5, 0.5, true)
+        if (ln > 0.62) h -= smooth((ln - 0.62) / 0.12) * 10.0
 
         return h
     }

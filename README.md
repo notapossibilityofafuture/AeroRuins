@@ -10,7 +10,7 @@ Developed by **notapossibilityofafuture**.
 
 | System | Description |
 |---|---|
-| Custom World Gen | Native terrain generation with custom climates, rivers, lakes, mountains and terrain variation. |
+| Custom World Gen | Native terrain generation with custom climates, gentle hills, rivers, lakes and terrain variation. |
 | Liminal Zones | Backrooms, malls, quarries, flooded subway areas and abandoned urban spaces. |
 | The Veil | Three extra dimensions: Dermis, Hypodermis and Muscle, generated from the same world seed. |
 | Cave Field | Large caves, tunnels, canyons, underground lakes, lava, geodes and themed cave biomes. |
@@ -128,6 +128,11 @@ height generation.
 The same value also controls the cave palette mix, so changing it to `0` keeps
 all cave styles custom and changing it to `100` uses the restrained vanilla
 stone/tuff profile everywhere caves are carved.
+
+Surface vegetation is generated per climate with denser grass, flowers, ferns,
+shrubs and trees. Terrain intentionally avoids the former extreme mountain
+peaks so settlements and vanilla-style structures can sit naturally on the
+landscape.
 
 ## Worldgen Editor
 

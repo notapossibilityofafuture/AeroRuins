@@ -71,7 +71,7 @@ class AeroPopulator(private val gen: AeroGenerator) : BlockPopulator() {
     private fun plantTrees(seed: Long, random: Random, p: Place, bx: Int, bz: Int) {
         if (!gen.usesTerrain(seed, bx + 8, bz + 8)) return
         val c0 = ClimateMap.at(seed, bx + 8, bz + 8)
-        val n = (c0.density * (0.4 + random.nextDouble() * 1.2)).toInt()
+        val n = (c0.density * (0.8 + random.nextDouble() * 1.8)).toInt()
         repeat(n) {
             val x = bx + 1 + random.nextInt(14)
             val z = bz + 1 + random.nextInt(14)
@@ -84,7 +84,7 @@ class AeroPopulator(private val gen: AeroGenerator) : BlockPopulator() {
                 return@repeat
             }
             val type = if (random.nextInt(100) < 70) c.tree else c.alt
-            if (!p.tree(x, h + 1, z, random, type) && !Place.treesWork) {
+            if (!p.tree(x, h + 1, z, random, type)) {
                 Trees.bigTree(p, random, x, h + 1, z, c, 7 + random.nextInt(5), 3) 
             }
         }
@@ -107,7 +107,7 @@ class AeroPopulator(private val gen: AeroGenerator) : BlockPopulator() {
         val attempts = when (realm) {
             Realm.FLOWERS -> 190 
             Realm.GARDEN -> 70
-            else -> 28
+            else -> 72
         }
         repeat(attempts) {
             val x = bx + random.nextInt(16)
@@ -121,14 +121,19 @@ class AeroPopulator(private val gen: AeroGenerator) : BlockPopulator() {
                 }
                 return@repeat
             }
-            if (h > SEA_LEVEL + 1 && p.type(x, h, z) == Material.GRASS_BLOCK && p.isAir(x, h + 1, z)) {
+            val ground = p.type(x, h, z)
+            if (h > SEA_LEVEL + 1 &&
+                ground in setOf(Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL, Material.MOSS_BLOCK) &&
+                p.isAir(x, h + 1, z)
+            ) {
                 val c = ClimateMap.at(seed, x, z)
                 val r = random.nextInt(100)
+                val floraChance = if (c.bare) minOf(c.flora, 5) else maxOf(c.flora, 14)
                 when {
-                    r < c.flora -> flower(p, random, x, h + 1, z, c)
-                    r < c.flora + 45 -> p.set(x, h + 1, z, Material.SHORT_GRASS)
-                    r < c.flora + 55 -> p.set(x, h + 1, z, Material.FERN)
-                    r < c.flora + 60 -> bush(p, random, x, h + 1, z)
+                    r < floraChance -> flower(p, random, x, h + 1, z, c)
+                    r < floraChance + 52 -> p.set(x, h + 1, z, Material.SHORT_GRASS)
+                    r < floraChance + 68 -> p.set(x, h + 1, z, Material.FERN)
+                    r < floraChance + 76 -> bush(p, random, x, h + 1, z)
                     else -> Unit
                 }
             }
