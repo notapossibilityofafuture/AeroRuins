@@ -14,6 +14,8 @@ import org.bukkit.generator.BiomeProvider
 import org.bukkit.generator.ChunkGenerator
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
+import java.util.UUID
+import kotlin.random.Random as KotlinRandom
 
 class AeroPlugin : JavaPlugin() {
     private lateinit var datapackInstaller: DatapackInstaller
@@ -25,6 +27,7 @@ class AeroPlugin : JavaPlugin() {
         server.pluginManager.registerEvents(SpawnListener(), this)
         server.pluginManager.registerEvents(VeilListener(this), this)
         getCommand("aeroworld")?.setExecutor(this)
+        getCommand("aerostudio")?.setExecutor(this)
         getCommand("aerotp")?.setExecutor(this)
         getCommand("aeroveil")?.setExecutor(this)
         server.scheduler.runTask(this, Runnable { loadSavedBases() }) 
@@ -50,6 +53,7 @@ class AeroPlugin : JavaPlugin() {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean =
         when (command.name.lowercase()) {
             "aeroworld" -> createWorld(sender, args)
+            "aerostudio" -> studio(sender, args)
             "aerotp" -> teleportToZone(sender, args)
             "aeroveil" -> veilTp(sender, args)
             else -> false
@@ -67,7 +71,7 @@ class AeroPlugin : JavaPlugin() {
         if (!ensureWorldDataFolder(name)) return null
         val creator = WorldCreator(name)
         if (layer == 0) {
-            creator.generator(AeroGenerator()).biomeProvider(AeroBiomeProvider()).generateStructures(true)
+            creator.seed(seed).generator(AeroGenerator()).biomeProvider(AeroBiomeProvider()).generateStructures(true)
         } else {
             creator.seed(seed).generator(VeilGenerator(layer)).biomeProvider(VeilBiomeProvider(layer)).generateStructures(false)
         }
@@ -100,21 +104,30 @@ class AeroPlugin : JavaPlugin() {
 
     private val basesFile: File get() = File(dataFolder, "worlds.yml")
 
-    private fun savedBases(): List<String> = YamlConfiguration.loadConfiguration(basesFile).getStringList("bases")
+    private fun savedWorlds(): YamlConfiguration = YamlConfiguration.loadConfiguration(basesFile)
 
-    private fun registerBase(base: String) {
+    private fun savedBases(): List<String> = savedWorlds().getStringList("bases")
+
+    private fun savedSeed(base: String): Long = savedWorlds().getLong("seeds.$base", Long.MIN_VALUE)
+
+    private fun registerBase(base: String, seed: Long) {
         val list = savedBases().toMutableList()
         if (base in list) return
         list.add(base)
         dataFolder.mkdirs()
         val y = YamlConfiguration()
         y.set("bases", list)
+        for (saved in list.dropLast(1)) {
+            val oldSeed = savedSeed(saved)
+            if (oldSeed != Long.MIN_VALUE) y.set("seeds.$saved", oldSeed)
+        }
+        y.set("seeds.$base", seed)
         y.save(basesFile)
     }
 
     private fun loadSavedBases() {
         for (base in savedBases()) {
-            val w = worldFor(base, 0, 0L) ?: continue
+            val w = worldFor(base, 0, savedSeed(base).takeUnless { it == Long.MIN_VALUE } ?: 0L) ?: continue
             applyBorder(w)
             ensureVeil(base, w)
         }
@@ -122,6 +135,7 @@ class AeroPlugin : JavaPlugin() {
 
     private fun createWorld(sender: CommandSender, args: Array<out String>): Boolean {
         val name = args.getOrElse(0) { "aeroworld" }
+        val seed = parseSeed(args.getOrNull(1))
         if (!isValidBaseName(name)) {
             sender.sendMessage("Ese nombre está reservado para una dimensión de The Veil. Usa otro nombre, por ejemplo 'aeroworld'.")
             return true
@@ -129,15 +143,22 @@ class AeroPlugin : JavaPlugin() {
         if (datapackInstaller.enabled() && Bukkit.getWorld(name) == null) {
             sender.sendMessage("Descargando e instalando el datapack antes de crear '$name'...")
             datapackInstaller.prepare(name, {
-                createWorldNow(sender, name)
+                createWorldNow(sender, name, seed)
             }, { error ->
                 sender.sendMessage("No se pudo instalar el datapack: $error")
             })
             return true
         }
 
-        createWorldNow(sender, name)
+        createWorldNow(sender, name, seed)
         return true
+    }
+
+    private fun parseSeed(value: String?): Long {
+        if (value == null || value.equals("random", ignoreCase = true) || value.equals("auto", ignoreCase = true)) {
+            return KotlinRandom.nextLong()
+        }
+        return value.toLongOrNull() ?: UUID.nameUUIDFromBytes(value.toByteArray()).mostSignificantBits
     }
 
     private fun isValidBaseName(name: String): Boolean {
@@ -147,17 +168,54 @@ class AeroPlugin : JavaPlugin() {
         return Veil.SUFFIX.drop(1).none { normalized.endsWith(it) }
     }
 
-    private fun createWorldNow(sender: CommandSender, name: String) {
-        sender.sendMessage("Cargando '$name' y sus dimensiones de The Veil... (la primera vez tarda)")
-        val world = worldFor(name, 0, 0L)
+    private fun createWorldNow(sender: CommandSender, name: String, seed: Long) {
+        sender.sendMessage("Cargando '$name' con semilla $seed y sus dimensiones de The Veil... (la primera vez tarda)")
+        val world = worldFor(name, 0, seed)
         if (world == null) {
             sender.sendMessage("No se pudo crear el mundo.")
             return
         }
         applyBorder(world)
         ensureVeil(name, world)
-        registerBase(name)
+        registerBase(name, world.seed)
         if (sender is Player) sender.teleport(world.spawnLocation)
+    }
+
+    private val studioWorlds = mutableSetOf<String>()
+
+    private fun studio(sender: CommandSender, args: Array<out String>): Boolean {
+        when (args.getOrNull(0)?.lowercase()) {
+            "open", "create" -> {
+                val seed = parseSeed(args.getOrNull(1))
+                val name = "aerostudio_${System.currentTimeMillis()}"
+                val world = worldFor(name, 0, seed)
+                if (world == null) {
+                    sender.sendMessage("No se pudo abrir el Studio.")
+                    return true
+                }
+                studioWorlds += name
+                applyBorder(world)
+                sender.sendMessage("Studio abierto: $name | semilla $seed | usa /aerostudio close para cerrarlo.")
+                if (sender is Player) sender.teleport(world.spawnLocation)
+            }
+            "close" -> {
+                val playerWorld = (sender as? Player)?.world?.name
+                val target = studioWorlds.firstOrNull { it == playerWorld } ?: studioWorlds.lastOrNull()
+                if (target == null) {
+                    sender.sendMessage("No hay un Studio abierto.")
+                    return true
+                }
+                val world = Bukkit.getWorld(target)
+                if (world != null) {
+                    Bukkit.unloadWorld(world, false)
+                }
+                File(server.worldContainer, target).deleteRecursively()
+                studioWorlds.remove(target)
+                sender.sendMessage("Studio cerrado: $target")
+            }
+            else -> sender.sendMessage("Uso: /aerostudio <open|close> [semilla|random]")
+        }
+        return true
     }
 
     private fun veilTp(sender: CommandSender, args: Array<out String>): Boolean {

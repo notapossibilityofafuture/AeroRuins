@@ -208,13 +208,18 @@ object Classics {
         val mz = bz + 8
         if (zoneAt(seed, mx, mz) != Zone.JUNGLE || !gen.usesTerrain(seed, mx, mz)) return
         if (Realms.at(seed, mx, mz) == Realm.NEIGHBORHOOD) return
+        val climate = ClimateMap.at(seed, mx, mz)
         val r = random.nextInt(1000)
         when {
-            r < 28 -> dungeon(seed, random, p, bx, bz, gen)
-            r < 38 -> mineshaft(seed, random, p, bx, bz, gen)
-            r < 44 -> ruinedPortal(seed, random, p, bx, bz, gen)
-            r < 47 -> outpost(seed, random, p, bx, bz, gen)
-            r < 51 && ClimateMap.at(seed, mx, mz).id in DRY -> pyramid(seed, random, p, bx, bz, gen)
+            r < 22 -> dungeon(seed, random, p, bx, bz, gen)
+            r < 31 -> mineshaft(seed, random, p, bx, bz, gen)
+            r < 36 -> ruinedPortal(seed, random, p, bx, bz, gen)
+            r < 39 -> outpost(seed, random, p, bx, bz, gen)
+            r < 43 && climate.id in DRY -> pyramid(seed, random, p, bx, bz, gen)
+            r < 46 && climate.id in DRY -> desertWell(seed, random, p, bx, bz, gen)
+            r < 49 && climate.id == "grey_fen" -> witchHut(seed, random, p, bx, bz, gen)
+            r < 52 && climate.cold -> igloo(seed, random, p, bx, bz, gen)
+            r < 55 && climate.warm -> jungleTemple(seed, random, p, bx, bz, gen)
         }
     }
 
@@ -332,5 +337,94 @@ object Classics {
         for (dx in 9..11) for (y in 1..3) for (dz in 13..20) p.set(x0 + dx, low + y, z0 + dz, Material.AIR)
         for (dx in 8..12) for (dz in 8..12) p.set(x0 + dx, low, z0 + dz, if ((dx + dz) % 2 == 0) Material.CHISELED_SANDSTONE else Material.SMOOTH_SANDSTONE)
         for ((cx, cz) in listOf(8 to 8, 12 to 8, 8 to 12, 12 to 12)) Loot.chestAt(p, random, x0 + cx, low + 1, z0 + cz, "tower")
+    }
+
+    private fun desertWell(seed: Long, random: Random, p: Place, bx: Int, bz: Int, gen: AeroGenerator) {
+        val x0 = bx + 6
+        val z0 = bz + 6
+        val low = Sites.flatBase(seed, gen, x0, z0, 5, 5, 2, 2) ?: return
+        for (dx in 0..4) for (dz in 0..4) {
+            p.set(x0 + dx, low, z0 + dz, Material.SANDSTONE)
+            if (dx in 1..3 && dz in 1..3) p.set(x0 + dx, low + 1, z0 + dz, Material.WATER)
+        }
+        for ((dx, dz) in listOf(0 to 0, 4 to 0, 0 to 4, 4 to 4)) {
+            p.set(x0 + dx, low + 1, z0 + dz, Material.SANDSTONE)
+            p.set(x0 + dx, low + 2, z0 + dz, Material.SANDSTONE)
+        }
+        for (dx in 0..4) for (dz in 0..4) {
+            p.set(x0 + dx, low + 3, z0 + dz, Material.SANDSTONE_SLAB)
+            if (dx == 2 || dz == 2) p.set(x0 + dx, low + 4, z0 + dz, Material.SANDSTONE_SLAB)
+        }
+    }
+
+    private fun witchHut(seed: Long, random: Random, p: Place, bx: Int, bz: Int, gen: AeroGenerator) {
+        val x0 = bx + 4
+        val z0 = bz + 4
+        val low = Sites.flatBase(seed, gen, x0, z0, 7, 7, 2, 3) ?: return
+        for (dx in 0..6) for (dz in 0..6) {
+            for (y in low + 1..low + 5) p.set(x0 + dx, y, z0 + dz, Material.AIR)
+            if (dx in 1..5 && dz in 1..5) p.set(x0 + dx, low, z0 + dz, Material.OAK_PLANKS)
+        }
+        for (dx in 0..6) for (dz in 0..6) {
+            val edge = dx == 0 || dx == 6 || dz == 0 || dz == 6
+            if (edge) for (y in 1..3) p.set(x0 + dx, low + y, z0 + dz, Material.OAK_PLANKS)
+        }
+        for (dx in -1..7) for (dz in -1..7) {
+            val roof = abs(dx - 3) + abs(dz - 3) <= 5
+            if (roof) p.set(x0 + dx, low + 4, z0 + dz, Material.SPRUCE_PLANKS)
+        }
+        for (dx in 0..6) p.put(x0 + dx, low + 5, z0 + 3, Material.SPRUCE_STAIRS, "[facing=south]")
+        p.set(x0 + 2, low + 1, z0 + 2, Material.CAULDRON)
+        p.set(x0 + 4, low + 1, z0 + 2, Material.CRAFTING_TABLE)
+        p.set(x0 + 3, low + 1, z0 + 4, Material.BARREL)
+        Loot.mobAt(p, x0 + 3, low + 1, z0 + 3, EntityType.WITCH)
+    }
+
+    private fun igloo(seed: Long, random: Random, p: Place, bx: Int, bz: Int, gen: AeroGenerator) {
+        val x0 = bx + 4
+        val z0 = bz + 4
+        val low = Sites.flatBase(seed, gen, x0, z0, 7, 7, 2, 3) ?: return
+        for (dx in 0..6) for (dz in 0..6) {
+            for (y in low + 1..low + 5) p.set(x0 + dx, y, z0 + dz, Material.AIR)
+            val d = (dx - 3) * (dx - 3) + (dz - 3) * (dz - 3)
+            if (d <= 10) p.set(x0 + dx, low + 1, z0 + dz, Material.SNOW_BLOCK)
+            if (d in 5..18) p.set(x0 + dx, low + 2, z0 + dz, Material.SNOW_BLOCK)
+            if (d <= 8) p.set(x0 + dx, low + 3, z0 + dz, Material.SNOW_BLOCK)
+        }
+        p.set(x0 + 3, low + 1, z0 + 1, Material.RED_CARPET)
+        p.set(x0 + 2, low + 1, z0 + 3, Material.FURNACE)
+        p.set(x0 + 4, low + 1, z0 + 3, Material.CRAFTING_TABLE)
+        p.put(x0 + 3, low + 1, z0 + 5, Material.SPRUCE_DOOR, "[half=lower,facing=south]")
+        p.put(x0 + 3, low + 2, z0 + 5, Material.SPRUCE_DOOR, "[half=upper,facing=south]")
+        if (Loot.rare(random, 55.0)) Loot.chestAt(p, random, x0 + 1, low + 1, z0 + 3, "cave")
+    }
+
+    private fun jungleTemple(seed: Long, random: Random, p: Place, bx: Int, bz: Int, gen: AeroGenerator) {
+        val x0 = bx + 2
+        val z0 = bz + 2
+        val low = Sites.flatBase(seed, gen, x0, z0, 11, 13, 2, 4) ?: return
+        for (tier in 0..2) {
+            val left = tier
+            val right = 10 - tier
+            val front = tier
+            val back = 12 - tier
+            for (x in left..right) for (z in front..back) {
+                val edge = x == left || x == right || z == front || z == back
+                if (edge) p.set(x0 + x, low + 1 + tier * 2, z0 + z, if (random.nextInt(100) < 18) Material.MOSSY_COBBLESTONE else Material.COBBLESTONE)
+            }
+        }
+        for (y in low + 1..low + 6) {
+            p.set(x0 + 5, y, z0 + 1, Material.AIR)
+            p.set(x0 + 5, y, z0 + 2, Material.AIR)
+        }
+        for (x in 2..8) p.set(x0 + x, low + 7, z0 + 6, Material.COBBLESTONE)
+        p.put(x0 + 5, low + 1, z0 + 12, Material.JUNGLE_DOOR, "[half=lower,facing=south]")
+        p.put(x0 + 5, low + 2, z0 + 12, Material.JUNGLE_DOOR, "[half=upper,facing=south]")
+        p.put(x0 + 3, low + 1, z0 + 5, Material.TRIPWIRE_HOOK, "[facing=east]")
+        p.put(x0 + 7, low + 1, z0 + 5, Material.TRIPWIRE_HOOK, "[facing=west]")
+        p.set(x0 + 5, low + 1, z0 + 5, Material.TRIPWIRE)
+        p.set(x0 + 5, low + 1, z0 + 3, Material.DISPENSER)
+        Loot.chestAt(p, random, x0 + 2, low + 1, z0 + 9, "cave")
+        Loot.chestAt(p, random, x0 + 8, low + 1, z0 + 9, "cave")
     }
 }

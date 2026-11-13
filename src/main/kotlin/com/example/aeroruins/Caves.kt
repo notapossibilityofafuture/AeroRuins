@@ -12,6 +12,7 @@ import kotlin.math.sqrt
 
 private fun fmod(a: Int, b: Int): Int = Math.floorMod(a, b)
 private fun fdiv(a: Int, b: Int): Int = Math.floorDiv(a, b)
+private const val CAVE_DECO_SCALE = 0.55
 
 
 
@@ -43,7 +44,15 @@ class CaveStyle(
         orePerMille = perMille
         return this
     }
+
 }
+
+private val VANILLA_CAVE_STYLE = CaveStyle(
+    "vanilla_caves",
+    arrayOf(Material.STONE, Material.STONE, Material.STONE, Material.TUFF, Material.GRAVEL),
+    arrayOf(Material.STONE, Material.TUFF),
+    8
+).withOres(18, Material.COAL_ORE, Material.IRON_ORE, Material.COPPER_ORE, Material.REDSTONE_ORE, Material.DIAMOND_ORE)
 
 private val DEEP_ORES: Map<Material, Material> = mapOf(
     Material.COAL_ORE to Material.DEEPSLATE_COAL_ORE, Material.IRON_ORE to Material.DEEPSLATE_IRON_ORE,
@@ -372,6 +381,15 @@ object CaveStyles {
         CaveStyle("lost_cistern", arrayOf(M.CLAY, M.MOSSY_COBBLESTONE, M.PRISMARINE), arrayOf(M.MOSSY_COBBLESTONE, M.PRISMARINE), 30, arrayOf(Deco(M.SEAGRASS, 8))),
     )
 
+    private const val VANILLA_REGION_SIZE = 32
+
+    fun at(seed: Long, x: Int, y: Int, z: Int): CaveStyle {
+        val regionX = Math.floorDiv(x, VANILLA_REGION_SIZE)
+        val regionZ = Math.floorDiv(z, VANILLA_REGION_SIZE)
+        val vanilla = Math.floorMod(mix(seed, regionX, regionZ, 950), 100) < 50
+        return if (vanilla) VANILLA_CAVE_STYLE else ALL[caveTheme(seed, x, y, z)]
+    }
+
     init {
         val O = M.COAL_ORE; val I = M.IRON_ORE; val C = M.COPPER_ORE; val G = M.GOLD_ORE
         val R = M.REDSTONE_ORE; val L = M.LAPIS_ORE; val D = M.DIAMOND_ORE; val E = M.EMERALD_ORE
@@ -531,7 +549,7 @@ internal fun AeroGenerator.applyCaves(
         val floorBelow = y - 1 >= minY && !air[y - 1 - minY]
         val ceilAbove = y + 1 <= maxY && !air[y + 1 - minY]
         if (!floorBelow && !ceilAbove) continue
-        val st = CaveStyles.ALL[caveTheme(seed, wx, y, wz)]
+        val st = CaveStyles.at(seed, wx, y, wz)
         if (floorBelow) lineFloor(seed, data, st, x, y, z, wx, wz)
         if (ceilAbove) lineCeiling(seed, data, st, x, y, z, wx, wz, air, minY)
     }
@@ -545,7 +563,7 @@ private fun lineFloor(seed: Long, data: ChunkData, st: CaveStyle, x: Int, y: Int
     var acc = 0
     for (d in st.floorDeco) {
         acc += d.pct
-        if (h2 < acc) {
+        if (h2 < acc * CAVE_DECO_SCALE) {
             data.setBlock(x, y, z, d.data())
             return
         }
@@ -566,12 +584,12 @@ private fun lineCeiling(
     var acc = 0
     for (d in st.ceilDeco) {
         acc += d.pct
-        if (h2 < acc) {
+        if (h2 < acc * CAVE_DECO_SCALE) {
             data.setBlock(x, y, z, d.data())
             return
         }
     }
-    if (st.hang == 0 || mix(seed, wx, k, 48) % 100 >= st.hangPct) return
+    if (st.hang == 0 || mix(seed, wx, k, 48) % 100 >= st.hangPct * CAVE_DECO_SCALE) return
     if (st.hang == 1) { 
         val len = 2 + mix(seed, wx, k, 45) % 4
         for (i in 0 until len) {
@@ -580,6 +598,7 @@ private fun lineCeiling(
             val m = if (i == len - 1) Material.CAVE_VINES else Material.CAVE_VINES_PLANT
             data.setBlock(x, yy, z, m.createBlockData("[berries=true]"))
         }
+
     } else {
         data.setBlock(x, y, z, Material.HANGING_ROOTS)
     }

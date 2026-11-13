@@ -9,7 +9,10 @@ import java.util.Random
 
 object Suburb {
     private const val REGION = 192
-    private val WALLS = arrayOf(Material.WHITE_CONCRETE, Material.LIGHT_GRAY_CONCRETE, Material.WHITE_TERRACOTTA, Material.SMOOTH_SANDSTONE)
+    private val WALLS = arrayOf(
+        Material.OAK_PLANKS, Material.SPRUCE_PLANKS, Material.BRICK, Material.WHITE_TERRACOTTA,
+        Material.LIGHT_GRAY_TERRACOTTA
+    )
     private val DESERT_WALLS = arrayOf(Material.SANDSTONE, Material.SMOOTH_SANDSTONE, Material.CUT_SANDSTONE, Material.TERRACOTTA)
     private val RUSTIC_WALLS = arrayOf(Material.OAK_PLANKS, Material.SPRUCE_PLANKS, Material.STRIPPED_OAK_LOG, Material.DARK_OAK_PLANKS)
     private val RUSTIC_ROOFS = arrayOf(
@@ -18,10 +21,10 @@ object Suburb {
         Material.DARK_OAK_STAIRS to Material.DARK_OAK_SLAB
     )
     private val ROOFS = arrayOf(
-        Material.POLISHED_ANDESITE_STAIRS to Material.POLISHED_ANDESITE_SLAB,
-        Material.DEEPSLATE_BRICK_STAIRS to Material.DEEPSLATE_BRICK_SLAB,
         Material.COBBLESTONE_STAIRS to Material.COBBLESTONE_SLAB,
-        Material.BRICK_STAIRS to Material.BRICK_SLAB
+        Material.BRICK_STAIRS to Material.BRICK_SLAB,
+        Material.DEEPSLATE_TILE_STAIRS to Material.DEEPSLATE_TILE_SLAB,
+        Material.POLISHED_ANDESITE_STAIRS to Material.POLISHED_ANDESITE_SLAB
     )
 
     
@@ -64,18 +67,22 @@ object Suburb {
         val roof = if (desert) (Material.SANDSTONE_STAIRS to Material.SANDSTONE_SLAB) else if (rustic) RUSTIC_ROOFS[random.nextInt(RUSTIC_ROOFS.size)] else ROOFS[random.nextInt(ROOFS.size)]
         val doorMat = if (desert) Material.ACACIA_DOOR else if (rustic) Material.SPRUCE_DOOR else Material.BIRCH_DOOR
         for (dx in -1..w) for (dz in -1..d) for (y in low + 1..low + 9) p.set(x0 + dx, y, z0 + dz, Material.AIR)
-        for (dx in 0 until w) for (dz in 0 until d) p.set(x0 + dx, low, z0 + dz, Material.OAK_PLANKS)
+        val foundation = if (desert) Material.SMOOTH_SANDSTONE else if (rustic) Material.COBBLESTONE else Material.STONE_BRICKS
+        for (dx in 0 until w) for (dz in 0 until d) p.set(x0 + dx, low, z0 + dz, foundation)
         
         for (dy in 1..3) for (dx in 0 until w) for (dz in 0 until d) {
             val edge = dx == 0 || dx == w - 1 || dz == 0 || dz == d - 1
             if (!edge) continue
-            val window = dy == 2 && (dx == 2 || dx == 6) && (dz == 0 || dz == d - 1)
+            val window = dy == 2 && (dx == 2 || dx == 6)
             val door = dx == w / 2 && dz == d - 1 && dy <= 2
             if (door) continue
             p.set(x0 + dx, low + dy, z0 + dz, if (window) Material.GLASS else wallMat)
         }
         p.put(x0 + w / 2, low + 1, z0 + d - 1, doorMat, "[half=lower,facing=south]")
         p.put(x0 + w / 2, low + 2, z0 + d - 1, doorMat, "[half=upper,facing=south]")
+        for (dx in 1 until w - 1) {
+            if (dx % 2 == 1) p.put(x0 + dx, low + 1, z0 - 1, Material.SPRUCE_SLAB, "[type=bottom]")
+        }
         
         val mid = (d + 1) / 2
         for (idx in 0..d + 1) {

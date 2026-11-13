@@ -15,15 +15,15 @@ object StructureDetails {
         height: Int,
         modern: Boolean
     ) {
-        val trim = if (modern) Material.SMOOTH_QUARTZ else Material.STRIPPED_OAK_LOG
-        val light = if (modern) Material.SEA_LANTERN else Material.LANTERN
+        val trim = if (modern) Material.SPRUCE_LOG else Material.STRIPPED_OAK_LOG
+        val light = if (modern) Material.LANTERN else Material.SOUL_LANTERN
         for (x in intArrayOf(x0, x0 + w - 1)) {
             for (y in base + 1..base + height) {
-                if (y % 4 == 1 || y == base + height) p.set(x, y, z0, trim)
+                if (y == base + 1 || y % 4 == 1 || y == base + height) p.set(x, y, z0, trim)
             }
         }
-        for (x in x0 + 1 until x0 + w - 1) {
-            if (random.nextInt(100) < 70 && p.isAir(x, base + 1, z0 - 1)) {
+        for (x in x0 + 1 until x0 + w - 1 step 2) {
+            if (random.nextInt(100) < 55 && p.isAir(x, base + 1, z0 - 1)) {
                 p.set(x, base + 1, z0 - 1, Material.FLOWER_POT)
                 p.set(x, base + 2, z0 - 1, if (modern) Material.FERN else Material.POTTED_OAK_SAPLING)
             }
@@ -33,7 +33,7 @@ object StructureDetails {
     }
 
     fun roofline(p: Place, x0: Int, z0: Int, w: Int, d: Int, y: Int, modern: Boolean) {
-        val material = if (modern) Material.SMOOTH_QUARTZ_SLAB else Material.MOSS_CARPET
+        val material = if (modern) Material.SPRUCE_SLAB else Material.MOSS_CARPET
         for (x in x0 - 1..x0 + w) {
             p.set(x, y, z0 - 1, material)
             p.set(x, y, z0 + d, material)

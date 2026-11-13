@@ -55,7 +55,7 @@ class AeroBiomeProvider : BiomeProvider() {
     }
 
     private fun cave(seed: Long, x: Int, y: Int, z: Int): Biome {
-        val st = CaveStyles.ALL[caveTheme(seed, x, y, z)]
+        val st = CaveStyles.at(seed, x, y, z)
         return pick(st.biome, if (y < DEEP_Y) Biome.DEEP_DARK else Biome.LUSH_CAVES)
     }
 
@@ -173,7 +173,11 @@ class AeroGenerator(private val wideCaves: Boolean = false) : ChunkGenerator() {
 
     
     override fun shouldGenerateStructures(worldInfo: WorldInfo, random: Random, chunkX: Int, chunkZ: Int): Boolean =
-        Settings.vanillaStructures
+        Settings.vanillaStructures &&
+            Math.floorMod(
+                mix(worldInfo.seed, Math.floorDiv(chunkX, 16), Math.floorDiv(chunkZ, 16), 901),
+                100
+            ) < Settings.vanillaMixChance
 
     override fun getFixedSpawnLocation(world: World, random: Random): Location {
         val h = maxOf(heightAt(world.seed, 0, 0), SEA_LEVEL)
@@ -189,7 +193,7 @@ class VeilBiomeProvider(private val layer: Int) : BiomeProvider() {
         cache.computeIfAbsent(name) { Registry.BIOME.get(NamespacedKey("aeroruins", name)) ?: fallback }
 
     override fun getBiome(info: WorldInfo, x: Int, y: Int, z: Int): Biome = when (layer) {
-        1 -> pick(CaveStyles.ALL[caveTheme(info.seed, x, y, z)].biome, Biome.LUSH_CAVES)
+        1 -> pick(CaveStyles.at(info.seed, x, y, z).biome, Biome.LUSH_CAVES)
         2 -> pick(BiomeIds.HYPO[Layers.hypoVariant(info.seed, x, z)], Biome.PLAINS)
         else -> pick(BiomeIds.MUSCLE[Layers.muscleVariant(info.seed, x, z)], Biome.NETHER_WASTES)
     }

@@ -6,8 +6,8 @@ object Settings {
     @Volatile var caves = true
     @Volatile var chests = true
     @Volatile var mobs = true
-    @Volatile var vanillaStructures = false
-    @Volatile var classics = false
+    @Volatile var vanillaStructures = true
+    @Volatile var classics = true
     @Volatile var faunaDensity = 1.0
     @Volatile var chestScale = 1.0
     @Volatile var liminalChance = 12
@@ -20,7 +20,7 @@ object Settings {
     @Volatile var villageChance = 1
     @Volatile var mobSpawnRate = 0.25
     @Volatile var structureMobRate = 0.4
-    @Volatile var vanillaMixChance = 40
+    @Volatile var vanillaMixChance = 50
     @Volatile var datapackAutoDownload = false
     @Volatile var datapackUrl = ""
     @Volatile var datapackFileName = "aeroruins-datapack.zip"
@@ -31,8 +31,8 @@ object Settings {
         caves = c.getBoolean("caves", true)
         chests = c.getBoolean("chests", true)
         mobs = c.getBoolean("mobs", true)
-        vanillaStructures = c.getBoolean("vanilla-structures", false)
-        classics = c.getBoolean("classic-structures", false)
+        vanillaStructures = c.getBoolean("vanilla-structures", true)
+        classics = c.getBoolean("classic-structures", true)
         faunaDensity = c.getDouble("fauna-density", 1.0).coerceIn(0.0, 5.0)
         liminalChance = c.getInt("liminal-chance", 12).coerceIn(0, 100)
         worldSize = c.getInt("world-size", 20000)
@@ -42,7 +42,7 @@ object Settings {
         villageChance = c.getInt("village-chance", 1).coerceIn(0, 100)
         townChance = c.getInt("town-chance", 1).coerceIn(0, 100)
         roadSpacing = c.getInt("road-spacing", 3200).coerceAtLeast(256)
-        vanillaMixChance = c.getInt("vanilla-mix-chance", 40).coerceIn(0, 100)
+        vanillaMixChance = c.getInt("vanilla-mix-chance", 50).coerceIn(0, 100)
         mobSpawnRate = c.getDouble("mob-spawn-rate", 0.25).coerceIn(0.0, 1.0)
         structureMobRate = c.getDouble("structure-mob-rate", 0.4).coerceIn(0.0, 1.0)
         chestScale = c.getDouble("chest-rarity", 1.0).coerceIn(0.0, 20.0)

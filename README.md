@@ -46,13 +46,21 @@ new world after replacing or regenerating the datapack.
 ## Commands
 
 ```text
-/aeroworld [name]
+/aeroworld [name] [seed|random]
+/aerostudio <open|close> [seed|random]
 /aerotp <town|city|village|tear|dome|garden|flowers|neighborhood|stronghold|...>
 /aeroveil <surface|dermis|hypodermis|muscle>
 ```
 
 `/aeroworld` creates or loads an AeroRuins world and, when enabled, its three
 The Veil dimensions.
+
+Seeds can be a signed 64-bit number, `random`/`auto`, or a text token. Text
+tokens are converted deterministically to a 64-bit seed and the resolved seed
+is shown in chat and saved in `plugins/AeroRuins/worlds.yml`.
+`/aerostudio open [seed]` creates a temporary preview world for testing a
+generator; `/aerostudio close` unloads and removes it. Studio worlds are not
+registered as production worlds.
 
 Use a unique base name such as `aeroworld` or `dream_world`. Names reserved for
 Veil layers (`dermis`, `hypodermis`, `muscle`, and names ending in
@@ -88,26 +96,34 @@ caves: true
 chests: true
 chest-rarity: 1.0
 mobs: true
-classic-structures: false
+classic-structures: true
 liminal-chance: 12
 world-size: 20000
 dome-spacing: 7000
 village-chance: 1
 town-chance: 1
 road-spacing: 3200
-vanilla-mix-chance: 40
+vanilla-structures: true
+vanilla-mix-chance: 50
 mob-spawn-rate: 0.25
 structure-mob-rate: 0.4
 fauna-density: 1.0
 veil-dimensions: true
 ```
 
+`classic-structures` enables classic dungeon, mineshaft, ruined portal, outpost,
+pyramid, desert well, witch hut, igloo, jungle temple and stronghold-style
+structures. Cave decorations are kept deliberately sparse so large caverns
+remain readable instead of becoming visually cluttered.
+
 See `src/main/resources/config.yml` for every available option.
 
-The default world profile leaves most regions as open wilderness, with themed
-zones and structures appearing less frequently. `vanilla-mix-chance` mixes
-vanilla biome identities into the custom generator; it does not switch terrain
-to vanilla height generation.
+The default world profile uses a 50/50 mix: half of the exterior regions keep
+vanilla biome identities, half of cave regions use a restrained stone/deepslate
+palette, and vanilla structure placement is enabled on half of the chunks.
+The remaining regions use AeroRuins terrain, themed caves and custom structures.
+`vanilla-mix-chance` controls that ratio and does not switch terrain to vanilla
+height generation.
 
 ## Worldgen Editor
 

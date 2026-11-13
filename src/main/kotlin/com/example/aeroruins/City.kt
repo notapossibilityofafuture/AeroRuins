@@ -77,7 +77,9 @@ object City {
         val x0 = bx + 2 + random.nextInt(3)
         val z0 = bz + 2 + random.nextInt(3)
         val low = Sites.flatBase(seed, gen, x0, z0, w, d, 1, 3) ?: return
-        clearPad(p, x0, z0, w, d, low, Material.LIGHT_GRAY_CONCRETE)
+        clearPad(p, x0, z0, w, d, low, if (random.nextBoolean()) Material.GRAVEL else Material.POLISHED_ANDESITE)
+        val wall = if (random.nextBoolean()) Material.BRICKS else Material.WHITE_TERRACOTTA
+        val trim = if (wall == Material.BRICKS) Material.SPRUCE_LOG else Material.DARK_OAK_LOG
         for (dy in 1..4) for (dx in 0 until w) for (dz in 0 until d) {
             val edge = dx == 0 || dx == w - 1 || dz == 0 || dz == d - 1
             if (!edge) continue
@@ -86,24 +88,35 @@ object City {
             if (door) continue
             val corner = (dx == 0 || dx == w - 1) && (dz == 0 || dz == d - 1)
             val m = when {
-                corner -> Material.GRAY_CONCRETE
-                front && dy <= 3 -> if (random.nextInt(100) < 10) Material.AIR else Material.LIGHT_GRAY_STAINED_GLASS
-                else -> Material.WHITE_TERRACOTTA
+                corner -> trim
+                front && dy in 2..3 -> Material.GLASS_PANE
+                else -> wall
             }
             p.set(x0 + dx, low + dy, z0 + dz, m)
         }
-        for (dx in 0 until w) for (dz in 0 until d) {
-            p.set(x0 + dx, low + 5, z0 + dz, Material.GRAY_CONCRETE)
-            if ((dx == 0 || dx == w - 1 || dz == 0 || dz == d - 1) && random.nextInt(100) < 75) p.set(x0 + dx, low + 6, z0 + dz, Material.LIGHT_GRAY_CONCRETE)
+        for (dx in 0 until w) for (dz in 0 until d) p.set(x0 + dx, low + 5, z0 + dz, trim)
+        val roofY = low + 6
+        val roofRows = d / 2
+        for (row in 0..roofRows) {
+            val y = roofY + row
+            val frontZ = z0 - 1 + row
+            val backZ = z0 + d - row
+            for (x in x0 - 1..x0 + w) {
+                p.put(x, y, frontZ, Material.SPRUCE_STAIRS, "[facing=south]")
+                p.put(x, y, backZ, Material.SPRUCE_STAIRS, "[facing=north]")
+            }
         }
-        for (dx in 1 until w - 1) p.set(x0 + dx, low + 4, z0 + d, Material.SPRUCE_SLAB) 
+        for (x in x0 - 1..x0 + w) {
+            p.set(x, roofY + roofRows + 1, z0 + d / 2, Material.SPRUCE_SLAB)
+            p.set(x, roofY + roofRows + 1, z0 + d / 2 - 1, Material.SPRUCE_SLAB)
+        }
         for (dx in 1 until w - 1) {
             if (random.nextInt(100) < 85) p.set(x0 + dx, low + 1, z0 + 1, Material.BOOKSHELF)
             if (random.nextInt(100) < 60) p.set(x0 + dx, low + 2, z0 + 1, Material.BOOKSHELF)
         }
         for (dx in 2..6) p.set(x0 + dx, low + 1, z0 + d - 3, Material.SPRUCE_PLANKS) 
         StructureDetails.facade(p, random, x0, z0, w, d, low, 4, modern = true)
-        StructureDetails.roofline(p, x0, z0, w, d, low + 6, modern = true)
+        StructureDetails.roofline(p, x0, z0, w, d, low + 5, modern = false)
         StructureDetails.plaza(p, random, x0 - 1, z0 - 1, w + 2, d + 2, low)
         Interiors.furnish(p, random, x0, z0, w, d, 2, listOf(low), 16)
         if (Loot.rare(random, 35.0)) Loot.chestAt(p, random, x0 + w - 2, low + 1, z0 + 2, "mall")
