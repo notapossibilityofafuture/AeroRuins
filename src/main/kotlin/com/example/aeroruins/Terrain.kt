@@ -6,12 +6,6 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.abs
 
 
-const val HIGH_Y = 100
-
-
-
-
-
 object Terrain {
     private class Gens(seed: Long) {
         val cont = SimplexOctaveGenerator(Random(seed xor 0x7A1L), 3).also { it.setScale(0.0007) }
@@ -42,6 +36,7 @@ object Terrain {
         val amp = 2.0 + 6.0 * smooth((r + 0.25) / 0.9)
         var h = SEA_LEVEL + 8 + c * 6 + d * amp
         h += smooth((r + 0.1) / 1.1) * 3.0
+        h = h.coerceIn(SEA_LEVEL + 2.0, SEA_LEVEL + 28.0)
         h = maxOf(h, SEA_LEVEL + 2.0)
 
         

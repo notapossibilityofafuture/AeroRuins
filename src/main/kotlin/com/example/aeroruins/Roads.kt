@@ -59,7 +59,7 @@ object Roads {
     
     private fun roadY(seed: Long, local: Boolean, axis: Int, k: Int, t: Int): Int? {
         val i0 = Math.floorDiv(t, STEP)
-        if (raw(seed, local, axis, k, i0) >= HIGH_Y - 6 || raw(seed, local, axis, k, i0 + 1) >= HIGH_Y - 6) return null
+        if (raw(seed, local, axis, k, i0) >= SEA_LEVEL + 22 || raw(seed, local, axis, k, i0 + 1) >= SEA_LEVEL + 22) return null
         val f = (t - i0 * STEP) / STEP.toDouble()
         val a = smoothY(seed, local, axis, k, i0)
         val b = smoothY(seed, local, axis, k, i0 + 1)

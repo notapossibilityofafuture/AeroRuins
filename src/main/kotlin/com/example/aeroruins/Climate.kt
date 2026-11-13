@@ -27,7 +27,6 @@ enum class Climate(
     val warm: Boolean = false,
     val gloom: Boolean = false,
     val bare: Boolean = false,
-    val high: Boolean = false,
     val flora: Int = 6
 ) {
     FROSTBITTEN_STEPPE("frostbitten_steppe", Material.SPRUCE_LOG, COLD, Biome.SNOWY_PLAINS, TreeType.REDWOOD, TreeType.TALL_REDWOOD, 1, cold = true),
@@ -54,8 +53,6 @@ enum class Climate(
     OLIVE_WOODLAND("olive_woodland", Material.OAK_LOG, WILD, Biome.FOREST, TreeType.TREE, TreeType.BIG_TREE, 9, warm = true),
     HUMID_RAINFOREST("humid_rainforest", Material.JUNGLE_LOG, WILD, Biome.JUNGLE, TreeType.JUNGLE, TreeType.SMALL_JUNGLE, 14, warm = true),
     BLACK_BOG("black_bog", Material.MANGROVE_LOG, WILD, Biome.SWAMP, TreeType.SWAMP, TreeType.TREE, 8, warm = true),
-    STONE_HIGHLANDS("stone_highlands", Material.SPRUCE_LOG, COLD, Biome.WINDSWEPT_FOREST, TreeType.REDWOOD, TreeType.TREE, 2, high = true),
-    CLOUD_CREST("cloud_crest", Material.SPRUCE_LOG, COLD, Biome.WINDSWEPT_HILLS, TreeType.REDWOOD, TreeType.REDWOOD, 1, cold = true, high = true),
     FROZEN_ESTATE("frozen_estate", Material.SPRUCE_LOG, COLD, Biome.SNOWY_PLAINS, TreeType.REDWOOD, TreeType.REDWOOD, 2, cold = true, gloom = true, bare = true),
     ASHEN_CATHEDRAL("ashen_cathedral", Material.DARK_OAK_LOG, COLD, Biome.DARK_FOREST, TreeType.TREE, TreeType.TREE, 3, gloom = true, bare = true),
     GLOOMWOOD("gloomwood", Material.DARK_OAK_LOG, COLD, Biome.DARK_FOREST, TreeType.DARK_OAK, TreeType.TREE, 14, gloom = true),
@@ -92,8 +89,6 @@ enum class Climate(
         val GARDEN: Array<Climate> = arrayOf(FORGOTTEN_GARDEN, IVY_COURTYARD, WILD_ORCHARD)
         val FLOWERS: Array<Climate> = arrayOf(PALE_FLOWER_FIELDS, POPPY_MEADOW, DANDELION_PLAIN, CORNFLOWER_HAZE)
         val HOOD: Array<Climate> = arrayOf(QUIET_SUBURBIA, CUL_DE_SAC)
-        val HIGH_WARM = STONE_HIGHLANDS
-        val HIGH_COLD = CLOUD_CREST
     }
 }
 
@@ -126,8 +121,6 @@ object ClimateMap {
         val hv = n.h.noise(fx, fz, 0.5, 0.5, true)
         val vv = n.v.noise(fx, fz, 0.5, 0.5, true)
         val gv = n.g.noise(fx, fz, 0.5, 0.5, true)
-
-        if (Terrain.heightAt(seed, x, z) >= HIGH_Y) return if (tv > 0.0) Climate.HIGH_WARM else Climate.HIGH_COLD
 
         val tb = when {
             tv < -0.18 -> 0

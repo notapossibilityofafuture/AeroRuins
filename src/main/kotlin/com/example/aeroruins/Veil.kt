@@ -81,6 +81,53 @@ class VeilGenerator(val layer: Int) : ChunkGenerator() {
         if (up != null) chamber(data, x, z, wx - up.cx, wz - up.cz, true)
         if (down != null) chamber(data, x, z, wx - down.cx, wz - down.cz, false)
         if (abs(wx) <= 10 && abs(wz) <= 10) chamber(data, x, z, wx, wz, null)
+        DermisDungeons.carve(info, data, x, z, wx, wz)
+    }
+
+    object DermisDungeons {
+        private const val CELL = 192
+        private const val FLOOR = DERMIS_F
+        private const val ROOM = 9
+
+        private fun center(seed: Long, gx: Int, gz: Int): IntArray? {
+            if (Math.floorMod(mix(seed, gx, gz, 611), 100) >= 28) return null
+            return intArrayOf(gx * CELL + CELL / 2, gz * CELL + CELL / 2)
+        }
+
+        private fun contains(cx: Int, cz: Int, x: Int, z: Int): Boolean {
+            val dx = abs(x - cx)
+            val dz = abs(z - cz)
+            val room = (dx % 24 <= ROOM && dz % 24 <= ROOM)
+            val corridor = (dx <= 2 && dz <= 34) || (dz <= 2 && dx <= 34)
+            return room || corridor
+        }
+
+        fun carve(info: WorldInfo, data: ChunkData, x: Int, z: Int, wx: Int, wz: Int) {
+            val gx = Math.floorDiv(wx, CELL)
+            val gz = Math.floorDiv(wz, CELL)
+            for (ix in gx - 1..gx + 1) for (iz in gz - 1..gz + 1) {
+                val c = center(info.seed, ix, iz) ?: continue
+                if (!contains(c[0], c[1], wx, wz)) continue
+                for (y in FLOOR - 1..FLOOR + 9) {
+                    val shell = y == FLOOR - 1 || y == FLOOR + 9
+                    data.setBlock(x, y, z, if (shell) Material.DEEPSLATE_BRICKS else Material.AIR)
+                }
+                data.setBlock(x, FLOOR, z, Material.POLISHED_DEEPSLATE)
+            }
+        }
+
+        fun populate(seed: Long, random: Random, p: Place, bx: Int, bz: Int) {
+            val gx = Math.floorDiv(bx + 8, CELL)
+            val gz = Math.floorDiv(bz + 8, CELL)
+            val c = center(seed, gx, gz) ?: return
+            val dx = c[0] - (bx + 8)
+            val dz = c[1] - (bz + 8)
+            if (abs(dx) > 10 || abs(dz) > 10) return
+            p.set(c[0], FLOOR + 1, c[1], Material.CHISELED_DEEPSLATE)
+            p.set(c[0], FLOOR + 2, c[1], Material.SOUL_LANTERN)
+            if (random.nextInt(100) < 70) Loot.chestAt(p, random, c[0] - 4, FLOOR + 1, c[1] - 4, "deep")
+            if (random.nextInt(100) < 45) p.spawner(c[0] + 4, FLOOR + 1, c[1] + 4, org.bukkit.entity.EntityType.SKELETON)
+        }
     }
 
     private fun chamber(data: ChunkData, x: Int, z: Int, dx: Int, dz: Int, up: Boolean?) {
@@ -107,7 +154,10 @@ class VeilPopulator(private val layer: Int) : BlockPopulator() {
         val bx = cx * 16
         val bz = cz * 16
         when (layer) {
-            1 -> Ores.populate(random, p, bx, bz, info.minHeight, Climate.OLD_OAK_FOREST) 
+            1 -> {
+                Ores.populate(random, p, bx, bz, info.minHeight, Climate.OLD_OAK_FOREST)
+                VeilGenerator.DermisDungeons.populate(seed, random, p, bx, bz)
+            }
             2 -> Layers.furnish(seed, random, p, bx, bz) 
             else -> Unit
         }

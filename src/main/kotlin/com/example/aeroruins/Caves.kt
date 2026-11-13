@@ -340,7 +340,7 @@ object CaveStyles {
         CaveStyle("sapphire_depths", arrayOf(M.BLUE_TERRACOTTA, M.BLUE_CONCRETE, M.DEEPSLATE), arrayOf(M.BLUE_CONCRETE, M.LIGHT_BLUE_STAINED_GLASS), 30, arrayOf(Deco(M.GLOW_LICHEN, 10))),
         CaveStyle("emerald_bower", arrayOf(M.EMERALD_BLOCK, M.MOSS_BLOCK, M.GRASS_BLOCK), arrayOf(M.EMERALD_BLOCK, M.LEAF_LITTER), 24, arrayOf(Deco(M.SHORT_GRASS, 18), Deco(M.FERN, 10)), emptyArray(), 2, 14),
         CaveStyle("lavender_lake", arrayOf(M.PURPLE_TERRACOTTA, M.CLAY, M.SAND), arrayOf(M.PURPLE_STAINED_GLASS, M.AMETHYST_BLOCK), 24, arrayOf(Deco(M.LILY_PAD, 8))),
-        CaveStyle("hollow_mountain", arrayOf(M.STONE, M.ANDESITE, M.GRANITE, M.DIORITE), arrayOf(M.STONE, M.ANDESITE), 38),
+        CaveStyle("stone_vault", arrayOf(M.STONE, M.ANDESITE, M.GRANITE, M.DIORITE), arrayOf(M.STONE, M.ANDESITE), 38),
         CaveStyle("granite_ravine", arrayOf(M.GRANITE, M.POLISHED_GRANITE, M.TERRACOTTA), arrayOf(M.GRANITE, M.POLISHED_GRANITE), 42),
         CaveStyle("diorite_skyway", arrayOf(M.DIORITE, M.POLISHED_DIORITE, M.QUARTZ_BLOCK), arrayOf(M.DIORITE, M.QUARTZ_BLOCK), 40, arrayOf(Deco(M.QUARTZ_SLAB, 8))),
         CaveStyle("andesite_warrens", arrayOf(M.ANDESITE, M.POLISHED_ANDESITE, M.TUFF), arrayOf(M.ANDESITE, M.POLISHED_ANDESITE), 35),

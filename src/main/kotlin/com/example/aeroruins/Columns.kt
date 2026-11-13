@@ -36,16 +36,15 @@ internal fun AeroGenerator.baseGround(info: WorldInfo, data: ChunkData, x: Int, 
     val h = heightAt(info.seed, wx, wz)
     rockColumn(info, data, x, z, wx, wz, h - 3)
     val beach = h <= SEA_LEVEL + 1
-    val rocky = h >= HIGH_Y + 12
-    data.setRegion(x, h - 3, z, x + 1, h, z + 1, if (beach) Material.SAND else if (rocky) Material.STONE else Material.DIRT)
+    val climate = ClimateMap.at(info.seed, wx, wz)
+    data.setRegion(x, h - 3, z, x + 1, h, z + 1, if (beach) Material.SAND else Material.DIRT)
     val roadTop = if (h > SEA_LEVEL) Roads.surface(info.seed, wx, wz) else null
     data.setBlock(
         x, h, z,
         when {
             roadTop != null -> roadTop
             beach -> Material.SAND
-            h >= HIGH_Y + 42 -> Material.SNOW_BLOCK
-            rocky -> if (mix(info.seed, wx, wz, 52) % 5 == 0) Material.ANDESITE else Material.STONE
+            climate.cold && h > SEA_LEVEL + 18 -> Material.SNOW_BLOCK
             else -> Material.GRASS_BLOCK
         }
     )

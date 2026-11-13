@@ -21,14 +21,13 @@ object Ores {
 
     
     private fun biomeFactor(o: Ore, c: Climate): Double {
-        val high = c.high
         return when (o.stone) {
             Material.COAL_ORE -> if (c.gloom) 1.5 else 1.0
-            Material.IRON_ORE -> if (high) 1.5 else 1.0
+            Material.IRON_ORE -> 1.0
             Material.COPPER_ORE, Material.GOLD_ORE -> if (c.warm) 1.5 else 1.0
             Material.LAPIS_ORE -> if (c.cold) 2.0 else 1.0
             Material.DIAMOND_ORE -> if (c.gloom) 1.3 else 1.0
-            Material.EMERALD_ORE -> if (high) 6.0 else 1.0
+            Material.EMERALD_ORE -> 1.0
             else -> 1.0
         }
     }

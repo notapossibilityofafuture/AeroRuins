@@ -134,6 +134,11 @@ shrubs and trees. Terrain intentionally avoids the former extreme mountain
 peaks so settlements and vanilla-style structures can sit naturally on the
 landscape.
 
+The first level of The Veil (Dermis) also contains deterministic deepslate
+dungeons with rooms, corridors, loot chests and skeleton spawners. Their
+locations are derived from the world seed, so the same seed always produces
+the same dungeon layout.
+
 ## Worldgen Editor
 
 The project includes a dependency-free Python editor based on Tkinter:
