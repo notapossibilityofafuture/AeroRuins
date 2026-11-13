@@ -122,6 +122,10 @@ class AeroPlugin : JavaPlugin() {
 
     private fun createWorld(sender: CommandSender, args: Array<out String>): Boolean {
         val name = args.getOrElse(0) { "aeroworld" }
+        if (!isValidBaseName(name)) {
+            sender.sendMessage("Ese nombre está reservado para una dimensión de The Veil. Usa otro nombre, por ejemplo 'aeroworld'.")
+            return true
+        }
         if (datapackInstaller.enabled() && Bukkit.getWorld(name) == null) {
             sender.sendMessage("Descargando e instalando el datapack antes de crear '$name'...")
             datapackInstaller.prepare(name, {
@@ -131,8 +135,16 @@ class AeroPlugin : JavaPlugin() {
             })
             return true
         }
+
         createWorldNow(sender, name)
         return true
+    }
+
+    private fun isValidBaseName(name: String): Boolean {
+        val normalized = name.lowercase()
+        if (normalized.isBlank() || normalized == "." || normalized == "..") return false
+        if (normalized in setOf("surface", "epidermis", "dermis", "hypodermis", "muscle", "musculo")) return false
+        return Veil.SUFFIX.drop(1).none { normalized.endsWith(it) }
     }
 
     private fun createWorldNow(sender: CommandSender, name: String) {

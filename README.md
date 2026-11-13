@@ -54,6 +54,11 @@ new world after replacing or regenerating the datapack.
 `/aeroworld` creates or loads an AeroRuins world and, when enabled, its three
 The Veil dimensions.
 
+Use a unique base name such as `aeroworld` or `dream_world`. Names reserved for
+Veil layers (`dermis`, `hypodermis`, `muscle`, and names ending in
+`_dermis`, `_hypodermis` or `_muscle`) are rejected so the generated dimension
+folders cannot become ambiguous, such as `hypodermis_hypodermis`.
+
 ## Automatic Datapack Download
 
 Minecraft datapacks cannot download files by themselves. AeroRuins can
