@@ -163,7 +163,8 @@ class AeroPlugin : JavaPlugin() {
 
     private fun isValidBaseName(name: String): Boolean {
         val normalized = name.lowercase()
-        if (normalized.isBlank() || normalized == "." || normalized == "..") return false
+        if (normalized.isBlank() || normalized.length > 32 || !normalized.matches(Regex("[a-z0-9._-]+"))) return false
+        if (normalized == "." || normalized == "..") return false
         if (normalized in setOf("surface", "epidermis", "dermis", "hypodermis", "muscle", "musculo")) return false
         return Veil.SUFFIX.drop(1).none { normalized.endsWith(it) }
     }
@@ -207,7 +208,18 @@ class AeroPlugin : JavaPlugin() {
                 }
                 val world = Bukkit.getWorld(target)
                 if (world != null) {
-                    Bukkit.unloadWorld(world, false)
+                    val fallback = Bukkit.getWorlds().firstOrNull { it.name != target }
+                    if (fallback == null) {
+                        sender.sendMessage("No se puede cerrar el Studio mientras no exista otro mundo cargado.")
+                        return true
+                    }
+                    for (player in server.onlinePlayers.filter { it.world.name == target }) {
+                        player.teleport(fallback.spawnLocation)
+                    }
+                    if (!Bukkit.unloadWorld(world, false)) {
+                        sender.sendMessage("Bukkit rechazo el cierre de '$target'; no se borro la carpeta.")
+                        return true
+                    }
                 }
                 File(server.worldContainer, target).deleteRecursively()
                 studioWorlds.remove(target)
@@ -341,11 +353,12 @@ class AeroPlugin : JavaPlugin() {
     }
 
     override fun onTabComplete(sender: CommandSender, command: Command, alias: String, args: Array<out String>): List<String>? {
-        if (args.size != 1) return null
-        val first = args[0].lowercase()
+        if (args.isEmpty()) return null
+        val first = args.last().lowercase()
         return when (command.name.lowercase()) {
             "aerotp" -> (Zone.entries.map { it.name.lowercase() } + FEATURES).filter { it.startsWith(first) }
             "aeroveil" -> listOf("surface", "dermis", "hypodermis", "muscle").filter { it.startsWith(first) }
+            "aerostudio" -> if (args.size == 1) listOf("open", "close").filter { it.startsWith(first) } else listOf("random", "auto").filter { it.startsWith(first) }
             else -> null
         }
     }

@@ -16,6 +16,7 @@ commands:
     description: Abre un mundo temporal de prueba con semilla reproducible
     usage: /aerostudio <open|close> [semilla|random]
     permission: aeroruins.create
+    aliases: [arstudio]
   aerotp:
     description: Teletransporta a ciudades, aldeas, desgarros, domos, zonas y salas
     usage: /aerotp <destino>

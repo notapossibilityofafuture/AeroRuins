@@ -125,6 +125,10 @@ The remaining regions use AeroRuins terrain, themed caves and custom structures.
 `vanilla-mix-chance` controls that ratio and does not switch terrain to vanilla
 height generation.
 
+The same value also controls the cave palette mix, so changing it to `0` keeps
+all cave styles custom and changing it to `100` uses the restrained vanilla
+stone/tuff profile everywhere caves are carved.
+
 ## Worldgen Editor
 
 The project includes a dependency-free Python editor based on Tkinter:

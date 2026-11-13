@@ -386,7 +386,7 @@ object CaveStyles {
     fun at(seed: Long, x: Int, y: Int, z: Int): CaveStyle {
         val regionX = Math.floorDiv(x, VANILLA_REGION_SIZE)
         val regionZ = Math.floorDiv(z, VANILLA_REGION_SIZE)
-        val vanilla = Math.floorMod(mix(seed, regionX, regionZ, 950), 100) < 50
+        val vanilla = Math.floorMod(mix(seed, regionX, regionZ, 950), 100) < Settings.vanillaMixChance
         return if (vanilla) VANILLA_CAVE_STYLE else ALL[caveTheme(seed, x, y, z)]
     }
 
