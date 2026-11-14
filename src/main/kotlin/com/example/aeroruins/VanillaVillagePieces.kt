@@ -1,5 +1,6 @@
 package com.example.aeroruins
 
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import java.util.Random
 
@@ -42,11 +43,42 @@ object VanillaVillagePieces {
         val palette = root["palette"] as List<*>
         val states = palette.map { state ->
             val map = state as Map<*, *>
-            val name = map["Name"].toString().removePrefix("minecraft:")
+            val rawName = map["Name"].toString().removePrefix("minecraft:")
+            val mappedName = when (rawName.lowercase()) {
+                "chain" -> "iron_chain"
+                else -> rawName
+            }
             val props = map["Properties"] as? Map<*, *>
-            val material = Material.matchMaterial(name.uppercase()) ?: Material.AIR
             val suffix = props?.entries?.joinToString(",", "[", "]") { "${it.key}=${it.value}" } ?: ""
-            if (suffix.isEmpty()) material.createBlockData() else material.createBlockData(suffix)
+
+            var data: org.bukkit.block.data.BlockData? = null
+            for (attempt in listOf("minecraft:$mappedName$suffix", "$mappedName$suffix", "minecraft:$rawName$suffix")) {
+                try {
+                    data = Bukkit.createBlockData(attempt)
+                    break
+                } catch (_: Throwable) {
+                }
+            }
+
+            data ?: run {
+                val material = Material.matchMaterial(mappedName.uppercase())
+                    ?: Material.matchMaterial(rawName.uppercase())
+                    ?: Material.AIR
+
+                if (material == Material.AIR) {
+                    Material.AIR.createBlockData()
+                } else {
+                    try {
+                        if (suffix.isEmpty()) material.createBlockData() else material.createBlockData(suffix)
+                    } catch (_: Throwable) {
+                        try {
+                            material.createBlockData()
+                        } catch (_: Throwable) {
+                            Material.AIR.createBlockData()
+                        }
+                    }
+                }
+            }
         }
         return (root["blocks"] as List<*>).mapNotNull { raw ->
             val map = raw as Map<*, *>

@@ -1,5 +1,6 @@
 package com.example.aeroruins
 
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import java.io.DataInputStream
 import java.io.InputStream
@@ -85,12 +86,41 @@ internal class SchematicStructure(
     }
 
     private fun blockData(raw: String): org.bukkit.block.data.BlockData {
-        val value = raw.removePrefix("minecraft:")
+        val normalized = if (raw.contains(':')) raw else "minecraft:$raw"
+        val value = normalized.removePrefix("minecraft:")
         val stateStart = value.indexOf('[')
-        val name = if (stateStart < 0) value else value.substring(0, stateStart)
+        val rawName = if (stateStart < 0) value else value.substring(0, stateStart)
         val props = if (stateStart < 0) "" else value.substring(stateStart)
-        val material = Material.matchMaterial(name.uppercase()) ?: Material.AIR
-        return if (props.isEmpty()) material.createBlockData() else material.createBlockData(props)
+
+        val mappedName = when (rawName.lowercase()) {
+            "chain" -> "iron_chain"
+            else -> rawName
+        }
+
+        for (attempt in listOf("minecraft:$mappedName$props", "$mappedName$props", normalized)) {
+            try {
+                return Bukkit.createBlockData(attempt)
+            } catch (_: Throwable) {
+            }
+        }
+
+        val material = Material.matchMaterial(mappedName.uppercase())
+            ?: Material.matchMaterial(rawName.uppercase())
+            ?: Material.AIR
+
+        if (material == Material.AIR) {
+            return Material.AIR.createBlockData()
+        }
+
+        return try {
+            if (props.isEmpty()) material.createBlockData() else material.createBlockData(props)
+        } catch (_: Throwable) {
+            try {
+                material.createBlockData()
+            } catch (_: Throwable) {
+                Material.AIR.createBlockData()
+            }
+        }
     }
 
     private fun decodeVarInts(bytes: ByteArray): IntArray {
