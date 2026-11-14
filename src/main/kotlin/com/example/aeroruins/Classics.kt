@@ -14,11 +14,12 @@ private fun fdiv(a: Int, b: Int): Int = Math.floorDiv(a, b)
 
 object Stronghold {
     private const val CELL = 2400
+    private const val CHANCE = 1
 
     
     fun center(seed: Long, gx: Int, gz: Int): IntArray? {
         val h = mix(seed, gx, gz, 220)
-        if (h % 100 >= 35) return null
+        if (h % 100 >= CHANCE) return null
         val cx = gx * CELL + 200 + (h ushr 6) % (CELL - 400)
         val cz = gz * CELL + 200 + (h ushr 16) % (CELL - 400)
         if (zoneAt(seed, cx, cz) != Zone.JUNGLE) return null
@@ -53,19 +54,12 @@ object Stronghold {
 
     fun populate(seed: Long, random: Random, p: Place, bx: Int, bz: Int, gen: AeroGenerator) {
         val c = center(seed, fdiv(bx, CELL), fdiv(bz, CELL)) ?: return
-        if (abs(c[0] - bx) > 90 || abs(c[1] - bz) > 90) return
-        val y0 = c[2]
-        for (i in 0..2) for (j in 0..2) {
-            val ox = c[0] - 30 + i * 20
-            val oz = c[1] - 30 + j * 20
-            if (ox in bx until bx + 16 && oz in bz until bz + 16) room(seed, random, p, gen, c, i, j, ox, oz, y0)
-            if (i < 2 && present(seed, c, i, j, false) && ox + 14 in bx until bx + 16 && oz + 4 in bz until bz + 16) {
-                corridor(p, random, ox + 14, oz + 4, y0, true)
-            }
-            if (j < 2 && present(seed, c, i, j, true) && ox + 4 in bx until bx + 16 && oz + 14 in bz until bz + 16) {
-                corridor(p, random, ox + 4, oz + 14, y0, false)
-            }
-        }
+        val x0 = c[0] - SchematicStronghold.width() / 2
+        val z0 = c[1] - SchematicStronghold.length() / 2
+        if (bx + 15 < x0 || bx >= x0 + SchematicStronghold.width() ||
+            bz + 15 < z0 || bz >= z0 + SchematicStronghold.length()
+        ) return
+        SchematicStronghold.place(p, random, x0, c[2], z0)
     }
 
     private fun corridor(p: Place, random: Random, ax: Int, az: Int, y0: Int, alongX: Boolean) {
@@ -203,6 +197,9 @@ object Classics {
 
     fun populate(seed: Long, random: Random, p: Place, bx: Int, bz: Int, gen: AeroGenerator) {
         if (!Settings.classics) return
+        if (AncientCity.populate(seed, random, p, bx, bz)) return
+        if (TrialChamber.populate(seed, random, p, bx, bz)) return
+        if (WaterMonument.populate(seed, random, p, bx, bz)) return
         Stronghold.populate(seed, random, p, bx, bz, gen)
         val mx = bx + 8
         val mz = bz + 8

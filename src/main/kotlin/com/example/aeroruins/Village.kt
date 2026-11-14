@@ -128,6 +128,7 @@ object Village {
         if (c[0] < bx - 70 || c[0] > bx + 85 || c[1] < bz - 70 || c[1] > bz + 85) return
         val st = style(seed, gx, gz, c)
         val desert = st == DESERT
+        val climate = ClimateMap.at(seed, c[0], c[1])
         val ruined = mix(seed, gx, gz, 182) % 100 < 18
         val list = pieces(seed, gx, gz, c, st)
         if (st == FORTIFIED) wall(seed, random, p, bx, bz, gen, c)
@@ -140,6 +141,7 @@ object Village {
             while (x != pc.x) { path(seed, p, gen, bx, bz, x, z); x += if (pc.x > x) 1 else -1 }
             while (z != pc.z) { path(seed, p, gen, bx, bz, x, z); z += if (pc.z > z) 1 else -1 }
         }
+        square(seed, p, gen, bx, bz, c[0], c[1], desert)
         for (pc in list) {
             if (pc.x < bx || pc.x >= bx + 16 || pc.z < bz || pc.z >= bz + 16) continue
             when (pc.kind) {
@@ -147,7 +149,7 @@ object Village {
                     well(seed, random, p, pc.x, pc.z, gen)
                     wellFolk(seed, random, p, pc.x, pc.z, gen, ruined)
                 }
-                HOUSE -> Rustic.cottage(seed, random, p, pc.x, pc.z, gen, desert, ruined)
+                HOUSE -> VanillaVillagePieces.placeHouse(seed, random, p, pc.x, pc.z, gen, climate)
                 CHURCH -> church(seed, random, p, pc.x, pc.z, gen)
                 BARN -> barn(seed, random, p, pc.x, pc.z, gen, desert)
                 FARM -> farm(seed, random, p, pc.x, pc.z, gen)
@@ -171,16 +173,39 @@ object Village {
             p.set(x, h, z, Material.DIRT_PATH)
             // Vanilla village paths are two blocks wide at intersections and
             // never turn into a continuous fence line.
-            if ((x + z) % 5 == 0) {
-                val sideX = x + 1
-                val sideY = gen.heightAt(seed, sideX, z)
-                if (sideX in bx until bx + 16) {
-                    val side = p.type(sideX, sideY, z)
-                    if (side == Material.GRASS_BLOCK || side == Material.DIRT || side == Material.COARSE_DIRT || side == Material.PODZOL)
-                        p.set(sideX, sideY, z, Material.DIRT_PATH)
-                }
+            for ((sx, sz) in arrayOf(1 to 0, -1 to 0, 0 to 1, 0 to -1)) {
+                if ((x + z + sx + sz) and 1 != 0) continue
+                val sideX = x + sx
+                val sideZ = z + sz
+                if (sideX !in bx until bx + 16 || sideZ !in bz until bz + 16) continue
+                val sideY = gen.heightAt(seed, sideX, sideZ)
+                val side = p.type(sideX, sideY, sideZ)
+                if (side == Material.GRASS_BLOCK || side == Material.DIRT || side == Material.COARSE_DIRT || side == Material.PODZOL)
+                    p.set(sideX, sideY, sideZ, Material.DIRT_PATH)
             }
             if (!p.type(x, h + 1, z).isSolid) p.set(x, h + 1, z, Material.AIR) 
+        }
+    }
+
+    private fun square(seed: Long, p: Place, gen: AeroGenerator, bx: Int, bz: Int, cx: Int, cz: Int, desert: Boolean) {
+        for (x in cx - 4..cx + 4) for (z in cz - 4..cz + 4) {
+            if (x !in bx until bx + 16 || z !in bz until bz + 16) continue
+            val y = gen.heightAt(seed, x, z)
+            if (p.type(x, y, z) in setOf(Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL, Material.DIRT_PATH)) {
+                p.set(x, y, z, if (desert) Material.SANDSTONE else Material.DIRT_PATH)
+            }
+        }
+        val wy = gen.heightAt(seed, cx, cz)
+        if (cx in bx until bx + 16 && cz in bz until bz + 16) {
+            p.set(cx, wy, cz, if (desert) Material.SMOOTH_SANDSTONE else Material.STONE_BRICKS)
+            p.set(cx, wy + 1, cz, Material.BELL)
+            for ((dx, dz) in listOf(-3 to -3, 3 to -3, -3 to 3, 3 to 3)) {
+                val x = cx + dx
+                val z = cz + dz
+                if (x !in bx until bx + 16 || z !in bz until bz + 16) continue
+                val y = gen.heightAt(seed, x, z)
+                p.set(x, y + 1, z, if (desert) Material.LANTERN else Material.LANTERN)
+            }
         }
     }
 

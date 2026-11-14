@@ -77,6 +77,10 @@ class Place(private val r: LimitedRegion) {
         if (inside(x, y, z)) r.setType(x, y, z, m)
     }
 
+    fun setData(x: Int, y: Int, z: Int, data: BlockData) {
+        if (inside(x, y, z)) r.setBlockData(x, y, z, data)
+    }
+
     fun put(x: Int, y: Int, z: Int, m: Material, props: String) {
         if (inside(x, y, z)) r.setBlockData(x, y, z, m.createBlockData(props))
     }
@@ -104,10 +108,15 @@ class Place(private val r: LimitedRegion) {
     fun chest(x: Int, y: Int, z: Int, face: String, table: String) {
         if (!Settings.chests || !inside(x, y, z)) return
         try {
-            r.setBlockData(x, y, z, Material.CHEST.createBlockData("[facing=$face]"))
+            if (r.getType(x, y, z) != Material.CHEST) {
+                r.setBlockData(x, y, z, Material.CHEST.createBlockData("[facing=$face]"))
+            }
             val st = r.getBlockState(x, y, z)
             if (st is Lootable) {
-                val lt = Bukkit.getLootTable(NamespacedKey("aeroruins", "chests/$table"))
+                val key = if (table.contains(':')) NamespacedKey.fromString(table)
+                else NamespacedKey("aeroruins", "chests/$table")
+                val lt = key?.let(Bukkit::getLootTable)
+                    ?: Bukkit.getLootTable(NamespacedKey("aeroruins", "chests/$table"))
                     ?: Bukkit.getLootTable(NamespacedKey.minecraft("chests/simple_dungeon"))
                 if (lt != null) {
                     st.lootTable = lt

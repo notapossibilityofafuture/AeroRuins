@@ -76,7 +76,7 @@ Set these values in `plugins/AeroRuins/config.yml`:
 
 ```yaml
 datapack-auto-download: true
-datapack-url: "https://github.com/notapossibilityofafuture/AeroRuins/releases/download/Release/AeroRuins-datapack-v2.2.0.zip"
+datapack-url: "https://github.com/notapossibilityofafuture/AeroRuins/releases/download/v2.3.0/AeroRuins-datapack-v2.3.0.zip"
 datapack-file-name: aeroruins-datapack.zip
 datapack-timeout-seconds: 30
 datapack-max-size-mb: 64
@@ -112,9 +112,19 @@ veil-dimensions: true
 ```
 
 `classic-structures` enables classic dungeon, mineshaft, ruined portal, outpost,
-pyramid, desert well, witch hut, igloo, jungle temple and stronghold-style
-structures. Cave decorations are kept deliberately sparse so large caverns
-remain readable instead of becoming visually cluttered.
+pyramid, desert well, witch hut, igloo, jungle temple, the bundled
+`stronghold.schem` stronghold, the `19709.schem` water monument and the
+`trial-chamber.schem` underground trial chamber, plus rare procedural ancient
+cities. All four special structures use a 1% candidate roll and additional
+terrain checks, so they are extremely uncommon but not impossible. The monument
+is only selected when its complete footprint is over ocean terrain. Cave
+decorations are kept deliberately sparse so large caverns remain readable
+instead of becoming visually cluttered.
+
+Villages use the official 1.21.11 NBT house pieces bundled in
+`src/main/resources/vanilla`, selecting the matching plains, desert, savanna,
+taiga, snowy, cherry or swamp palette for each climate while retaining the
+plugin's deterministic roads, farms, villagers and village variants.
 
 See `src/main/resources/config.yml` for every available option.
 
@@ -180,7 +190,7 @@ Requirements: Java 21 and the included Gradle wrapper.
 The compiled plugin is created at:
 
 ```text
-build\libs\AeroRuins-2.2.0.jar
+build\libs\AeroRuins-2.3.0.jar
 ```
 
 ## Architecture

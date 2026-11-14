@@ -17,7 +17,7 @@ suburb-ceilings: false
 classic-structures: true
 fauna-density: 1.0
 datapack-auto-download: true
-datapack-url: https://github.com/notapossibilityofafuture/AeroRuins/releases/download/Release/AeroRuins-datapack-v2.2.0.zip
+datapack-url: https://github.com/notapossibilityofafuture/AeroRuins/releases/download/v2.3.0/AeroRuins-datapack-v2.3.0.zip
 datapack-file-name: aeroruins-datapack.zip
 datapack-timeout-seconds: 30
 datapack-max-size-mb: 64
