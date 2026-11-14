@@ -190,7 +190,7 @@ Requirements: Java 21 and the included Gradle wrapper.
 The compiled plugin is created at:
 
 ```text
-build\libs\AeroRuins-2.3.0.jar
+build\libs\AeroRuins-2.3.1.jar
 ```
 
 ## Architecture
